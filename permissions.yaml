@@ -1,0 +1,7 @@
+# Repository workflow permission policy
+# Default: read-only. Workflows must explicitly elevate permissions
+# only when a documented capability requires it.
+
+permissions:
+  contents: read
+  pull-requests: read
