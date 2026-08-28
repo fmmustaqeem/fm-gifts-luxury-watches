@@ -124,7 +124,27 @@ model OrderItem {
   price     Float
 }
 
-enum Role { ADMIN CUSTOMER }
-enum OrderStatus { PENDING CONFIRMED PROCESSING SHIPPED DELIVERED CANCELLED }
-enum PaymentMethod { COD BANK_TRANSFER }
-enum PaymentStatus { UNPAID PAID FAILED }
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  COD
+  BANK_TRANSFER
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  FAILED
+}
