@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --gold: #d4af37;
+    --gold-light: #f5e5c0;
+  }
+  body {
+    @apply bg-black text-white antialiased;
+  }
+}
+
+@layer utilities {
+  .text-gold-500 { color: var(--gold); }
+  .border-gold-500 { border-color: var(--gold); }
+  .bg-gold-500 { background-color: var(--gold); }
+}
