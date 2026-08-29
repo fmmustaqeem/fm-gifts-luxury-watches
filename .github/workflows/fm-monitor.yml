@@ -1,0 +1,64 @@
+name: FM Monitor
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check configured targets
+        shell: bash
+        run: |
+          set -uo pipefail
+          ruby <<'RUBY'
+          require 'yaml'
+          require 'open3'
+          config = YAML.load_file('monitor-config.yml')
+          timeout = config.fetch('monitor').fetch('timeout_seconds', 15)
+          failures = []
+          lines = []
+          config.fetch('targets').select { |t| t.fetch('enabled', false) }.each do |target|
+            base = target.fetch('base_url').sub(%r{/$}, '')
+            lines << "Target: #{target.fetch('name')}"
+            target.fetch('checks').each do |check|
+              url = "#{base}#{check.fetch('path')}"
+              out, _err, st = Open3.capture3('curl','-sS','-o','/tmp/body','-w','%{http_code}','--max-time',timeout.to_s,url)
+              code = out.strip
+              expected = check.fetch('expected_status', 200).to_s
+              matched = !check['content_match'] || File.read('/tmp/body').downcase.include?(check['content_match'].to_s.downcase)
+              ok = st.success? && code == expected && matched
+              lines << "  #{ok ? 'PASS' : 'FAIL'} #{check.fetch('path')} status=#{code} expected=#{expected} content_match=#{matched}"
+              failures << "#{target.fetch('name')} #{check.fetch('path')}" unless ok
+            end
+          end
+          lines << "Overall: #{failures.empty? ? 'PASS' : 'FAIL'}"
+          lines << "Time: #{Time.now.utc.strftime('%Y-%m-%d %H:%M:%S UTC')}"
+          File.write('report.txt', lines.join("\n") + "\n")
+          exit 1 unless failures.empty?
+          RUBY
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fm-monitoring-report
+          path: report.txt
+          if-no-files-found: ignore
+      - name: Alert on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.existsSync('report.txt') ? fs.readFileSync('report.txt','utf8') : 'FM Monitor failed before report creation.';
+            const {data: issues} = await github.rest.issues.listForRepo({owner:context.repo.owner, repo:context.repo.repo, state:'open', labels:['monitoring'], per_page:100});
+            const existing = issues.find(i => i.title.includes('FM Monitor Alert'));
+            if (existing) await github.rest.issues.update({owner:context.repo.owner, repo:context.repo.repo, issue_number:existing.number, body:report});
+            else await github.rest.issues.create({owner:context.repo.owner, repo:context.repo.repo, title:'🚨 FM Monitor Alert - Target Issue Detected', body:report, labels:['monitoring']});
