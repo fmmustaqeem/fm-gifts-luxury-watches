@@ -1,0 +1,32 @@
+name: Permissions Policy Check
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'permissions.yaml'
+      - 'security/**'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate permissions policy exists
+        run: test -f permissions.yaml
+
+      - name: Check workflow permissions declarations
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            if grep -Eq '^permissions:[[:space:]]*$|^permissions:' "$file"; then
+              echo "Permissions declared: $file"
+            else
+              echo "ERROR: workflow lacks an explicit permissions block: $file"
+              exit 1
+            fi
+          done < <(find .github/workflows -type f \( -name '*.yml' -o -name '*.yaml' \) -print0)

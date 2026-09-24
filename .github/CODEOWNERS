@@ -1,0 +1,7 @@
+# FM Gifts & Luxury Watches — protected ownership
+# Default owner for repository changes.
+* @wakilmustaqeem
+
+# Security and governance policy must remain under explicit ownership.
+/POLICY.md @wakilmustaqeem
+/security/ @wakilmustaqeem
