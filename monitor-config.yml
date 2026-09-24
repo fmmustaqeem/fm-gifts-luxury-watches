@@ -1,0 +1,39 @@
+# FM Monitor target configuration
+# Add or disable targets here without changing the workflow.
+monitor:
+  interval_minutes: 30
+  issue_label: monitoring
+  artifact_name: fm-monitoring-report
+  timeout_seconds: 15
+
+targets:
+  - id: biztoolkit
+    name: BizToolkit
+    enabled: true
+    base_url: https://biztoolkit-ashy.vercel.app
+    checks:
+      - path: /
+        expected_status: 200
+      - path: /sitemap.xml
+        expected_status: 200
+      - path: /calculators
+        expected_status: 200
+        content_match: calculator
+
+  # Add the FM Home URL when its production endpoint is finalized.
+  - id: fm-home
+    name: FM Home
+    enabled: false
+    base_url: https://REPLACE-WITH-FM-HOME-URL
+    checks:
+      - path: /
+        expected_status: 200
+
+  # Add FM Commerce when its production endpoint is finalized.
+  - id: fm-commerce
+    name: FM Commerce
+    enabled: false
+    base_url: https://REPLACE-WITH-FM-COMMERCE-URL
+    checks:
+      - path: /
+        expected_status: 200
