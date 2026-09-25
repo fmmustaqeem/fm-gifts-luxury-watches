@@ -1,0 +1,61 @@
+name: AI Site Guard
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  site-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build health report
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          set -u
+          mkdir -p ai-reports
+          {
+            echo "# AI Site Guard Report"
+            echo
+            echo "- Repository: ${GITHUB_REPOSITORY}"
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Time (UTC): $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+            echo
+            echo "## Repository checks"
+            test -f index.html && echo "- index.html: PASS" || echo "- index.html: FAIL"
+            test -f admin/index.html && echo "- admin/index.html: PASS" || echo "- admin/index.html: WARN (no admin entrypoint)"
+            test -d data && echo "- data/: PASS" || echo "- data/: WARN"
+            test -d admin && echo "- admin/: PASS" || echo "- admin/: WARN"
+            echo
+            echo "## Live site check"
+            if [ -n "${SITE_URL:-}" ]; then
+              code=$(curl -L -s -o /tmp/site.html -w "%{http_code}" --max-time 20 "$SITE_URL" || true)
+              echo "- URL: $SITE_URL"
+              echo "- HTTP: $code"
+              if [ "$code" = "200" ]; then echo "- Status: PASS"; else echo "- Status: FAIL"; fi
+            else
+              echo "- SITE_URL repository variable: NOT CONFIGURED"
+              echo "- Status: DEFERRED (no URL invented)"
+            fi
+            echo
+            echo "## Change-control"
+            echo "- Safe automated checks only."
+            echo "- No production overwrite by this worker."
+            echo "- Fixes must go through commit + CI evidence."
+            echo "- Product/source data remains private on admin side."
+          } > ai-reports/site-guard.md
+
+      - name: Publish report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-site-guard-report
+          path: ai-reports/site-guard.md
