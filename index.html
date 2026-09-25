@@ -23,27 +23,27 @@ footer{background:#222;color:#ddd;margin-top:50px}.foot{max-width:1400px;margin:
 </head>
 <body>
 <div class="top"><span>Welcome to FM Gifts — Karachi</span><span>Help & Support &nbsp; | &nbsp; Track Order &nbsp; | &nbsp; Login</span></div>
-<header><div class="head"><a class="logo" href="#">FM Gifts</a><div class="search"><input id="main-search" placeholder="Search in FM Gifts..."><button onclick="document.getElementById('catalog').scrollIntoView()">⌕</button></div><div class="head-actions"><span>Account<b>Login / Sign Up</b></span><span>🛒</span></div></div><div class="nav"><div class="nav-inner"><strong>☰ Categories</strong><a href="#watches">Watches</a><a href="#perfume">Perfume</a><a href="#gifts">Gifts</a><a href="#accessories">Accessories</a><a href="#deals">Flash Deals</a><a href="#catalog">Shop All</a><a href="#assistant">AI Assistant</a></div></div></header>
-<main>
+<header><div class="head"><a class="logo" href="#home" data-commerce-action="home">FM Gifts</a><div class="search"><input id="main-search" placeholder="Search in FM Gifts..."><button type="button" data-commerce-action="search">⌕</button></div><div class="head-actions"><span>Account<b>Login / Sign Up</b></span><span>🛒</span></div></div><div class="nav"><div class="nav-inner"><strong>☰ Categories</strong><a href="#watches">Watches</a><a href="#perfume">Perfume</a><a href="#gifts">Gifts</a><a href="#accessories">Accessories</a><a href="#deals">Flash Deals</a><a href="#catalog">Shop All</a><a href="#assistant">AI Assistant</a></div></div></header>
+<main id="home">
 <div class="crumb">Home › FM Gifts</div>
 <section class="hero">
 <aside class="sidecat">
 <a href="#watches">⌚ Watches</a><a href="#perfume">🌿 Perfumes</a><a href="#gifts">🎁 Gift Sets</a><a href="#accessories">✨ Accessories</a><a href="#kids">🧸 Kids Watches</a><a href="#gifts">👝 Wallets & Belts</a><a href="#gifts">🕰️ Clocks</a>
 </aside>
-<div class="banner"><div class="banner-copy"><div class="kicker">FM Gifts • Luxury Watches & Gifts</div><h1>Find a gift worth remembering.</h1><p>Watches, perfumes, gifts and accessories — organized like a real marketplace so you can browse, search and shop without getting lost.</p><a class="btn" href="#catalog">Shop Now</a><a class="btn light" href="#categories">Browse Categories</a></div></div>
+<div class="banner"><div class="banner-copy"><div class="kicker">FM Gifts • Luxury Watches & Gifts</div><h1>Find a gift worth remembering.</h1><p>Watches, perfumes, gifts and accessories — organized like a real marketplace so you can browse, search and shop without getting lost.</p><a class="btn" href="#catalog" data-commerce-action="shop">Shop Now</a><a class="btn light" href="#categories" data-commerce-action="categories">Browse Categories</a></div></div>
 </section>
 <div class="strip"><div>🚚<b>Local Shop Inventory</b>Real products will be added</div><div>🔎<b>Easy Search</b>Find by name or category</div><div>💬<b>AI Shopping Help</b>Ask in Urdu or English</div><div>🎁<b>Gift Ready</b>Watches, perfume & accessories</div></div>
 
 <section class="section arrivals" id="categories"><div class="section-head"><h2>New Arrivals</h2><div class="slider-actions"><button class="slider-btn" type="button" onclick="slideArrivals(-1)" aria-label="Previous">‹</button><button class="slider-btn" type="button" onclick="slideArrivals(1)" aria-label="Next">›</button></div></div><div id="arrival-track" class="arrival-track">
-<div class="arrival"><div class="pic">⌚</div><h3>Men's Watches</h3><p>New styles • Analog • Digital</p><a class="view" href="#watches">Explore ›</a></div>
+<div class="arrival"><div class="pic">⌚</div><h3>Men's Watches</h3><p>New styles • Analog • Digital</p><a class="view" href="#catalog" data-category="Watches">Explore ›</a></div>
 <div class="arrival"><div class="pic">⌚</div><h3>Women's Watches</h3><p>Fashion • Luxury • Brand</p><a class="view" href="#watches">Explore ›</a></div>
-<div class="arrival"><div class="pic">🌿</div><h3>New Perfumes</h3><p>EDP • EDT • Attar</p><a class="view" href="#perfume">Explore ›</a></div>
+<div class="arrival"><div class="pic">🌿</div><h3>New Perfumes</h3><p>EDP • EDT • Attar</p><a class="view" href="#catalog" data-category="Perfume">Explore ›</a></div>
 <div class="arrival"><div class="pic">🎁</div><h3>Gift Sets</h3><p>Birthday • Anniversary • Couple</p><a class="view" href="#gifts">Explore ›</a></div>
-<div class="arrival"><div class="pic">🧸</div><h3>Kids Watches</h3><p>Digital • Cartoon • School</p><a class="view" href="#kids">Explore ›</a></div>
-<div class="arrival"><div class="pic">✨</div><h3>Accessories</h3><p>Chains • Bracelets • Sunglasses</p><a class="view" href="#accessories">Explore ›</a></div>
+<div class="arrival"><div class="pic">🧸</div><h3>Kids Watches</h3><p>Digital • Cartoon • School</p><a class="view" href="#catalog" data-category="Kids Watches">Explore ›</a></div>
+<div class="arrival"><div class="pic">✨</div><h3>Accessories</h3><p>Chains • Bracelets • Sunglasses</p><a class="view" href="#catalog" data-category="Accessories">Explore ›</a></div>
 </div></section>
 
-<section class="section deals" id="deals"><div class="dealbar"><b>Flash Deals</b><span>Shop all deals ›</span></div><div class="dealgrid">
+<section class="section deals" id="deals"><div class="dealbar"><b>Flash Deals</b><a class="view" href="#catalog" data-commerce-action="deals">Shop all deals ›</a></div><div class="dealgrid">
 <div class="deal"><div class="pic">⌚</div><h3>Featured Watches</h3><span class="price">Coming soon</span></div>
 <div class="deal"><div class="pic">🌿</div><h3>Featured Perfumes</h3><span class="price">Coming soon</span></div>
 <div class="deal"><div class="pic">🎁</div><h3>Gift Sets</h3><span class="price">Coming soon</span></div>
@@ -51,25 +51,25 @@ footer{background:#222;color:#ddd;margin-top:50px}.foot{max-width:1400px;margin:
 <div class="deal"><div class="pic">✨</div><h3>Accessories</h3><span class="price">Coming soon</span></div>
 </div></section>
 
-<section class="section category-section" id="watches"><div class="section-head"><h2>Watches</h2><a class="view" href="#catalog">Shop Watches ›</a></div><div class="subgrid">
+<section class="section category-section" id="watches"><div class="section-head"><h2>Watches</h2><a class="view" href="#catalog" data-category="Watches">Shop Watches ›</a></div><div class="subgrid">
 <div class="sub"><h3>Men Watches</h3><div class="tags"><span>Analog</span><span>Digital</span><span>Luxury</span><span>Brand</span></div></div>
 <div class="sub"><h3>Women Watches</h3><div class="tags"><span>Analog</span><span>Fashion</span><span>Luxury</span><span>Brand</span></div></div>
 <div class="sub"><h3>Kids Watches</h3><div class="tags"><span>Digital</span><span>Cartoon</span><span>School</span><span>Brand</span></div></div>
 <div class="sub"><h3>Couple Watches</h3><div class="tags"><span>Couple Sets</span><span>Gift</span><span>Brand</span></div></div>
 </div></section>
 
-<section class="section category-section" id="perfume"><div class="section-head"><h2>Perfume</h2><a class="view" href="#catalog">Shop Perfume ›</a></div><div class="subgrid">
+<section class="section category-section" id="perfume"><div class="section-head"><h2>Perfume</h2><a class="view" href="#catalog" data-category="Perfume">Shop Perfume ›</a></div><div class="subgrid">
 <div class="sub"><h3>Men Perfumes</h3><div class="tags"><span>EDP</span><span>EDT</span><span>Attar</span><span>Brand</span></div></div>
 <div class="sub"><h3>Women Perfumes</h3><div class="tags"><span>EDP</span><span>EDT</span><span>Attar</span><span>Brand</span></div></div>
 <div class="sub"><h3>Unisex Perfumes</h3><div class="tags"><span>EDP</span><span>Attar</span><span>Brand</span></div></div>
 <div class="sub"><h3>Perfume Gift Sets</h3><div class="tags"><span>Perfume Set</span><span>Brand</span></div></div>
 </div></section>
 
-<section class="section category-section" id="kids"><div class="section-head"><h2>Kids Watches</h2><a class="view" href="#catalog">Shop Kids ›</a></div><div class="subgrid">
+<section class="section category-section" id="kids"><div class="section-head"><h2>Kids Watches</h2><a class="view" href="#catalog" data-category="Kids Watches">Shop Kids ›</a></div><div class="subgrid">
 <div class="sub"><h3>Baby</h3></div><div class="sub"><h3>Baba</h3></div><div class="sub"><h3>Digital</h3></div><div class="sub"><h3>Scale</h3></div><div class="sub"><h3>Cartoon / Ora Watch</h3></div><div class="sub"><h3>School / Casual</h3></div>
 </div></section>
 
-<section class="section category-section" id="gifts"><div class="section-head"><h2>Gifts & Accessories</h2><a class="view" href="#catalog">Shop Gifts ›</a></div><div class="subgrid">
+<section class="section category-section" id="gifts"><div class="section-head"><h2>Gifts & Accessories</h2><a class="view" href="#catalog" data-category="Gifts">Shop Gifts ›</a></div><div class="subgrid">
 <div class="sub"><h3>Gift Sets</h3><div class="tags"><span>Birthday</span><span>Anniversary</span><span>Couple</span></div></div>
 <div class="sub"><h3>Wallets</h3><div class="tags"><span>Men</span><span>Women</span><span>Gift</span></div></div>
 <div class="sub"><h3>Belts</h3><div class="tags"><span>Men</span><span>Women</span><span>Gift</span></div></div>
@@ -86,6 +86,31 @@ footer{background:#222;color:#ddd;margin-top:50px}.foot{max-width:1400px;margin:
 <script>
 const esc=s=>String(s??"").replace(/[&<>]/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[x]));
 const FM_AI_URL="https://fm-gifts-ai.fmgiftwatch.workers.dev";
+// Commerce navigation is intentionally separate from the AI assistant.
+// Product/category CTAs never call the AI endpoint.
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-commerce-action],[data-category]");
+  if(!el)return;
+  e.preventDefault();
+  if(el.dataset.category){
+    cb.value=el.dataset.category;
+    sb.value="";
+    render();
+    document.getElementById("catalog").scrollIntoView({behavior:"smooth",block:"start"});
+    return;
+  }
+  const action=el.dataset.commerceAction;
+  if(action==="search"){
+    document.getElementById("catalog").scrollIntoView({behavior:"smooth",block:"start"});
+    sb.focus();
+  }else if(action==="shop"||action==="deals"){
+    document.getElementById("catalog").scrollIntoView({behavior:"smooth",block:"start"});
+  }else if(action==="categories"){
+    document.getElementById("categories").scrollIntoView({behavior:"smooth",block:"start"});
+  }else if(action==="home"){
+    document.getElementById("home").scrollIntoView({behavior:"smooth",block:"start"});
+  }
+});
 document.getElementById("fm-chat-form").addEventListener("submit",async e=>{e.preventDefault();const i=document.getElementById("fm-chat-input"),l=document.getElementById("fm-chat-log"),m=i.value.trim();if(!m)return;l.insertAdjacentHTML("beforeend","<div style='margin-top:8px'><b>You:</b> "+esc(m)+"</div>");i.value="";try{const r=await fetch(FM_AI_URL,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({message:m})}),d=await r.json(),reply=d?.result?.response||d?.result?.result||"Maaf kijiye, jawab nahi mil saka.";l.insertAdjacentHTML("beforeend","<div style='margin-top:8px'><b>FM Gifts AI:</b> "+esc(reply)+"</div>")}catch{l.insertAdjacentHTML("beforeend","<div style='margin-top:8px'>AI assistant temporarily unavailable.</div>")}l.scrollTop=l.scrollHeight});
 const FM_PRODUCTS=[];const pg=document.getElementById("product-grid"),sb=document.getElementById("catalog-search"),cb=document.getElementById("catalog-category");
 function render(){const q=sb.value.trim().toLowerCase(),c=cb.value,items=FM_PRODUCTS.filter(p=>(!c||p.category===c)&&(!q||[p.name,p.category,p.subcategory,p.brand].join(" ").toLowerCase().includes(q)));pg.innerHTML=items.length?items.map(p=>"<div class='product'><div class='pic'>⌚</div><h3>"+esc(p.name)+"</h3><p>"+esc(p.category)+" → "+esc(p.subcategory||"")+(p.brand?" → "+esc(p.brand):"")+"</p><b class='price'>"+esc(p.price||"Price to be added")+"</b></div>").join(""):"<div class='coming'><b>Real shop inventory coming next.</b><br>Products will appear here with photo, brand, price and stock status.</div>"}sb.addEventListener("input",render);cb.addEventListener("change",render);document.getElementById("main-search").addEventListener("keydown",e=>{if(e.key==="Enter"){sb.value=e.target.value;render();document.getElementById("catalog").scrollIntoView()}});render();
