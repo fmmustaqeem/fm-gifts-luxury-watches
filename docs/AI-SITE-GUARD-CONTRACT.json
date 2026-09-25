@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "worker": "AI Site Guard",
+  "mission": [
+    "monitor site health",
+    "detect safe-to-classify bugs",
+    "check security/dependency signals",
+    "monitor catalog integrity",
+    "produce evidence-based reports"
+  ],
+  "rules": {
+    "no_blind_production_changes": true,
+    "one_change_one_commit": true,
+    "ci_evidence_required": true,
+    "private_supplier_data": true,
+    "separate_projects": true
+  },
+  "escalation": {
+    "security_issue": "report_and_block_unsafe_change",
+    "uncertain_bug": "report_for_review",
+    "safe_bug": "prepare_fix_then_require_ci"
+  },
+  "report": {
+    "frequency": "hourly plus push/manual",
+    "required": [
+      "health",
+      "security",
+      "bugs",
+      "catalog",
+      "customer_flow",
+      "admin",
+      "commit",
+      "ci",
+      "deployment",
+      "pending",
+      "percentage"
+    ]
+  }
+}
