@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FM Gifts Admin | Supplier Product Feed</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222}header{background:#222;color:#fff;padding:18px 5%}main{max-width:1100px;margin:auto;padding:24px 5%}.card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:18px;margin-bottom:16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-size:12px;color:#666}input,textarea,select{width:100%;box-sizing:border-box;margin-top:5px;padding:10px;border:1px solid #ddd;border-radius:4px}textarea{min-height:100px}.full{grid-column:1/-1}button{border:0;background:#f85606;color:#fff;padding:11px 16px;border-radius:4px;cursor:pointer}.secondary{background:#444}.notice{background:#fff8e8;border:1px solid #efd28a;padding:12px;font-size:13px}.row{display:flex;gap:8px;align-items:center;justify-content:space-between;border-top:1px solid #eee;padding:12px 0}.tag{font-size:11px;background:#fff1eb;color:#f85606;padding:4px 7px;border-radius:3px}.muted{font-size:12px;color:#777}@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+</style><script src="supplier-feed.js"></script></head>
+<body><header><strong>FM Gifts — Admin / Supplier Product Feed</strong></header><main>
+<div class="notice"><b>Purpose:</b> capture supplier WhatsApp posts as product candidates. Nothing becomes public until Admin changes state to <b>approved/published</b>. Supplier group identity, source post and source cost stay internal.</div>
+<section class="card"><h2>Supplier source</h2><div class="grid"><div><label>Network</label><input id="network" readonly></div><div><label>Group</label><input id="group" readonly></div><div><label>Latest announcement</label><input id="announcement" readonly></div><div><label>Verification</label><input id="verification" readonly></div></div></section>
+<section class="card"><h2>Capture WhatsApp product</h2><div class="grid">
+<div><label>Product name</label><input id="name" placeholder="e.g. Watch Model 123"></div>
+<div><label>Brand</label><input id="brand" placeholder="Brand"></div>
+<div><label>Category</label><input id="category" placeholder="Watches / Perfume / Gifts"></div>
+<div><label>Subcategory</label><input id="subcategory" placeholder="Men / Women / Kids..."></div>
+<div><label>Supplier price (PKR)</label><input id="sourcePrice" type="number" min="0"></div>
+<div><label>Stock</label><input id="stock" placeholder="available / limited / unknown"></div>
+<div><label>Product image URL</label><input id="image" placeholder="Paste approved image URL"></div>
+<div><label>Initial state</label><select id="state"><option>pending</option><option>approved</option></select></div>
+<div class="full"><label>WhatsApp post / announcement text</label><textarea id="sourcePost" placeholder="Paste the supplier's product post here"></textarea></div>
+</div><br><button id="add">Add to Supplier Inbox</button></section>
+<section class="card"><h2>Supplier Inbox</h2><div id="list"></div><br><button class="secondary" id="export">Export approved JSON</button></section>
+</main>
+<script>
+const esc=s=>String(s??"").replace(/[&<>"]/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[x]));
+const key="fm_gifts_supplier_candidates"; const seed=FM_SUPPLIER_FEED[0];
+network.value=seed.network;group.value=seed.group;announcement.value=seed.latestAnnouncement.text+" • "+seed.latestAnnouncement.date;verification.value=seed.verification;
+let items=JSON.parse(localStorage.getItem(key)||"[]");
+function save(){localStorage.setItem(key,JSON.stringify(items));render();}
+function render(){list.innerHTML=items.length?items.map((p,i)=>"<div class='row'><div><b>"+esc(p.name||"Unnamed product")+"</b><div class='muted'>"+esc(p.brand)+" • "+esc(p.category)+" • source "+esc(p.sourcePrice??"pending")+" PKR • customer "+esc(p.customerPrice??"pending")+" PKR</div><span class='tag'>"+esc(p.state)+"</span></div><button data-i='"+i+"' class='remove'>Remove</button></div>").join(""):"<div class='muted'>No captured products yet.</div>";document.querySelectorAll(".remove").forEach(b=>b.onclick=()=>{items.splice(Number(b.dataset.i),1);save()})}
+add.onclick=()=>{const p=fmSupplierProduct({supplierId:seed.id,sourceGroup:seed.group,name:name.value.trim(),brand:brand.value.trim(),category:category.value.trim(),subcategory:subcategory.value.trim(),sourcePrice:sourcePrice.value,image:image.value.trim(),stock:stock.value.trim(),sourcePost:sourcePost.value,state:state.value});if(!p.name){alert("Product name required");return}items.push(p);save();["name","brand","category","subcategory","sourcePrice","image","stock","sourcePost"].forEach(id=>document.getElementById(id).value="");};
+export.onclick=()=>{const approved=items.filter(p=>p.state==="approved"||p.state==="published");const blob=new Blob([JSON.stringify(approved,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="fm-gifts-approved-products.json";a.click();URL.revokeObjectURL(a.href)};
+render();
+</script></body></html>
