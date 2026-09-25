@@ -1,0 +1,70 @@
+{
+  "version": "1.0",
+  "scope": "admin_settings",
+  "sections": {
+    "storefront": [
+      "homepage",
+      "navigation",
+      "public_visibility",
+      "maintenance"
+    ],
+    "catalog": [
+      "categories",
+      "subcategories",
+      "brands",
+      "products",
+      "sku_variants",
+      "inventory"
+    ],
+    "pricing": [
+      "retail_margin",
+      "b2b_margin",
+      "tax_separate",
+      "delivery"
+    ],
+    "orders": [
+      "checkout",
+      "cod",
+      "returns",
+      "order_status"
+    ],
+    "communications": [
+      "whatsapp",
+      "email",
+      "notifications"
+    ],
+    "seo": [
+      "title",
+      "meta",
+      "canonical",
+      "robots",
+      "sitemap",
+      "analytics"
+    ],
+    "marketing": [
+      "banners",
+      "offers",
+      "coupons",
+      "advertising"
+    ],
+    "ai": [
+      "content_editor",
+      "catalog_assistant",
+      "approval_required"
+    ],
+    "security": [
+      "admin_access",
+      "authentication",
+      "audit_log",
+      "backup"
+    ],
+    "deployment": [
+      "cloudflare",
+      "domain",
+      "build",
+      "ci_status"
+    ]
+  },
+  "privacy": "Admin-only controls; partner/supplier/wholesaler/reseller records remain private.",
+  "principle": "Each project keeps its own settings, data, deployment and domain."
+}
