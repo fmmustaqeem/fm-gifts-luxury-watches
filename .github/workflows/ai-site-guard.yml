@@ -55,7 +55,7 @@ jobs:
           } > ai-reports/site-guard.md
 
       - name: Publish report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ai-site-guard-report
           path: ai-reports/site-guard.md
