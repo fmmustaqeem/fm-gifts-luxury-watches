@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, android, android-api-33, arm64, soc-spreadtrum-t820-ums9620-2h10-unisoc-t820]
     steps:
       - uses: actions/checkout@v4
       - name: Validate site entrypoint
