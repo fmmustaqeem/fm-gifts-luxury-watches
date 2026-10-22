@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, android, android-api-33, arm64, soc-spreadtrum-t820-ums9620-2h10-unisoc-t820]
     steps:
       - uses: actions/checkout@v4
       - name: Validate site entrypoint
@@ -37,7 +37,7 @@ jobs:
   production-gate:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: validate
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, android, android-api-33, arm64, soc-spreadtrum-t820-ums9620-2h10-unisoc-t820]
     environment:
       name: production
       url: https://fm-gifts-luxury-watches.pages.dev
