@@ -17,6 +17,10 @@ jobs:
     runs-on: [self-hosted, android, android-api-33, arm64, soc-spreadtrum-t820-ums9620-2h10-unisoc-t820]
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Python for JSON validation
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
       - name: Validate site entrypoint
         run: test -s index.html
       - name: Validate HTML structure
