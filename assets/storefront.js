@@ -1,7 +1,7 @@
 const menuButton=document.getElementById("menuButton");
 const navigation=document.getElementById("navigation");
-menuButton.addEventListener("click",()=>{const open=navigation.classList.toggle("open");menuButton.setAttribute("aria-expanded",String(open));});
-navigation.addEventListener("click",event=>{if(event.target.closest("a")){navigation.classList.remove("open");menuButton.setAttribute("aria-expanded","false");}});
+menuButton.addEventListener("click",()=>{const open=navigation.classList.toggle("is-open");menuButton.setAttribute("aria-expanded",String(open));});
+navigation.addEventListener("click",event=>{if(event.target.closest("a")){navigation.classList.remove("is-open");menuButton.setAttribute("aria-expanded","false");}});
 document.getElementById("year").textContent=new Date().getFullYear();
 const categoryFilter=document.getElementById("categoryFilter");
 const searchInput=document.getElementById("searchInput");
