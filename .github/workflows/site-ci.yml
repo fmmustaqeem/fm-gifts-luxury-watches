@@ -1,18 +1,16 @@
-name: Site CI + Release Gate
+name: FM Gifts Site Validation
 
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
   workflow_dispatch:
-
-concurrency:
-  group: fm-gifts-${{ github.ref }}
-  cancel-in-progress: true
 
 permissions:
   contents: read
+
+concurrency:
+  group: fm-gifts-validation-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
@@ -26,7 +24,7 @@ jobs:
           grep -q '<html' index.html
           grep -q '</html>' index.html
           grep -q '<title>' index.html
-      - name: Validate storefront assets and categories
+      - name: Validate storefront assets and catalogue
         run: |
           test -s assets/storefront.css
           test -s assets/storefront.js
@@ -40,16 +38,5 @@ jobs:
           grep -q 'id="categoryFilter"' index.html
           grep -q 'fetch("/data/catalog.json"' assets/storefront.js
           python3 -m json.tool data/catalog.json >/dev/null
-
-  production-gate:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    needs: validate
-    runs-on: [self-hosted, android, android-api-33, arm64, soc-spreadtrum-t820-ums9620-2h10-unisoc-t820]
-    environment:
-      name: production
-      url: https://fm-gifts-luxury-watches.pages.dev
-    steps:
-      - name: Production release gate
-        run: |
-          echo "FM Gifts production gate passed."
-          echo "Cloudflare Pages Git integration performs the production deployment."
+      - name: Check ByetHost deployment workflow is present
+        run: test -s .github/workflows/deploy-byethost.yml
