@@ -26,13 +26,20 @@ jobs:
           grep -q '<html' index.html
           grep -q '</html>' index.html
           grep -q '<title>' index.html
-      - name: Validate core storefront sections
+      - name: Validate storefront assets and categories
         run: |
-          grep -q 'Shop All Products' index.html
-          grep -q 'AI Shopping Assistant' index.html
-          grep -q 'Watches' index.html
-          grep -q 'Perfume' index.html
-          grep -q 'Kids Watches' index.html
+          test -s assets/storefront.css
+          test -s assets/storefront.js
+          test -s data/catalog.json
+          grep -q 'data-category="Watches"' index.html
+          grep -q 'data-category="Fragrances"' index.html
+          grep -q 'data-category="Gifts"' index.html
+          grep -q 'data-category="Accessories"' index.html
+          grep -q 'id="catalogue"' index.html
+          grep -q 'id="searchInput"' index.html
+          grep -q 'id="categoryFilter"' index.html
+          grep -q 'fetch("/data/catalog.json"' assets/storefront.js
+          python3 -m json.tool data/catalog.json >/dev/null
 
   production-gate:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
