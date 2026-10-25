@@ -74,4 +74,28 @@ shopSearch?.addEventListener("input",()=>{if(searchInput)searchInput.value=shopS
 searchInput?.addEventListener("input",()=>{if(shopSearch)shopSearch.value=searchInput.value;renderProducts();});
 document.getElementById("searchForm")?.addEventListener("submit",event=>{event.preventDefault();if(shopSearch)shopSearch.value=searchInput?.value||"";document.getElementById("shop")?.scrollIntoView({behavior:reduceMotion?"auto":"smooth"});renderProducts();});
 document.querySelectorAll("[data-category]").forEach(button=>button.addEventListener("click",()=>{if(categoryFilter)categoryFilter.value=button.dataset.category;renderProducts();document.getElementById("shop")?.scrollIntoView({behavior:reduceMotion?"auto":"smooth"});}));
-fetch("data/catalog.json",{headers:{"Accept":"application/json"}}).then(response=>{if(!response.ok)throw new Error("catalogue unavailable");return response.json();}).then(data=>{catalogue=Array.isArray(data.products)?data.products:[];renderProducts();}).catch(()=>{catalogue=[];renderProducts();});
+/* Load real, published WooCommerce products through the public Store API.
+   No consumer secret is placed in browser code. */
+const storeApiUrl="/wp-json/wc/store/v1/products?per_page=24&orderby=date&order=desc";
+fetch(storeApiUrl,{headers:{"Accept":"application/json"}})
+  .then(response=>{if(!response.ok)throw new Error("WooCommerce Store API returned "+response.status);return response.json();})
+  .then(data=>{
+    if(!Array.isArray(data))throw new Error("Unexpected WooCommerce product response");
+    catalogue=data.filter(p=>p&&p.is_purchasable!==false&&p.is_in_stock!==false).map(p=>({
+      id:p.id,
+      name:(p.name||"").trim(),
+      brand:Array.isArray(p.brands)?p.brands.map(b=>b.name).filter(Boolean).join(", "):"",
+      category:Array.isArray(p.categories)&&p.categories.length?p.categories[0].name:"Products",
+      price:typeof p.prices?.price==="string"&&p.prices.price!==""?Number(p.prices.price)/Math.pow(10,Number(p.prices.currency_minor_unit||2)):null,
+      image:Array.isArray(p.images)&&p.images[0]?.src?p.images[0].src:"",
+      url:p.permalink||""
+    })).filter(p=>p.name);
+    renderProducts();
+  })
+  .catch(error=>{
+    console.error("FM Gifts: unable to load WooCommerce products.",error);
+    catalogue=[];
+    renderProducts();
+    const notice=makeEmptyState("Shop connection unavailable.","We could not load products from the WooCommerce shop. Please try again shortly.");
+    productGrid?.append(notice);
+  });
