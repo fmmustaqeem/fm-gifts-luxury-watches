@@ -39,7 +39,8 @@ jobs:
           test -s assets/storefront.css
           test -s assets/storefront.js
           test -s data/catalog.json
-          python3 -m json.tool data/catalog.json >/dev/null
+          # Validate JSON with Node.js; the Android runner does not provide python3.
+          node -e "JSON.parse(require('fs').readFileSync('data/catalog.json', 'utf8'))"
           test -n "$FTP_SERVER"
           test -n "$FTP_USERNAME"
           test -n "$FTP_PASSWORD"
