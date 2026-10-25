@@ -39,35 +39,62 @@ jobs:
           FTP_TARGET_DIR: ${{ secrets.BYETHOST_FTP_TARGET_DIR }}
         run: |
           set -euo pipefail
-          test -s index.html
-          test -s assets/storefront.css
-          test -s assets/storefront.js
-          test -s data/catalog.json
+          for file in index.html store.html policies.html assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js data/catalog.json store/cart.html store/checkout.html; do
+            test -s "$file"
+          done
           node -e "JSON.parse(require('fs').readFileSync('data/catalog.json', 'utf8'))"
           test -n "$FTP_SERVER"
           test -n "$FTP_USERNAME"
           test -n "$FTP_PASSWORD"
           # Refuse to deploy into the live WordPress document root.
           test "$FTP_TARGET_DIR" = "htdocs/fm-gifts-preview/"
-      - name: Assemble minimal public storefront
+      - name: Assemble and validate isolated preview payload
         shell: bash
         run: |
           set -euo pipefail
           rm -rf deploy
           mkdir -p deploy/assets deploy/data deploy/store
           cp index.html store.html policies.html deploy/
-          cp assets/storefront.css assets/storefront.js deploy/assets/
+          cp assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js deploy/assets/
           cp data/catalog.json deploy/data/
-          # Only public storefront assets are staged; repository metadata and
-          # admin/API source are intentionally excluded from the FTP payload.
-          if [ -d store ]; then cp -R store/. deploy/store/; fi
-          test -s deploy/index.html
-          test -s deploy/assets/storefront.css
-          test -s deploy/assets/storefront.js
-          test -s deploy/data/catalog.json
-          if find deploy -name '.git*' -o -name '.env*' | grep -q .; then
+          cp store/cart.html store/checkout.html deploy/store/
+
+          # The preview lives in a subfolder, so rewrite root-relative paths
+          # to paths relative to each HTML page. The live WordPress root is untouched.
+          python3 - <<'PY'
+          from pathlib import Path
+          for name in ("index.html", "store.html", "policies.html"):
+              p = Path("deploy") / name
+              s = p.read_text()
+              s = s.replace('href="/', 'href="./').replace('src="/assets/', 'src="./assets/')
+              p.write_text(s)
+          for name in ("cart.html", "checkout.html"):
+              p = Path("deploy/store") / name
+              s = p.read_text()
+              s = s.replace('href="/assets/', 'href="../assets/')
+              s = s.replace('src="/assets/', 'src="../assets/')
+              s = s.replace('href="/', 'href="../')
+              p.write_text(s)
+          for name in ("storefront.js", "shop.js"):
+              p = Path("deploy/assets") / name
+              s = p.read_text().replace('fetch("/data/catalog.json"', 'fetch("data/catalog.json"')
+              p.write_text(s)
+          # Do not expose WordPress admin links from the preview policy page.
+          p = Path("deploy/policies.html")
+          p.write_text(p.read_text().replace('href="./admin/"', 'href="./"'))
+          PY
+
+          for file in deploy/index.html deploy/store.html deploy/policies.html deploy/assets/storefront.css deploy/assets/storefront.js deploy/assets/shop.js deploy/assets/cart.js deploy/assets/checkout.js deploy/data/catalog.json deploy/store/cart.html deploy/store/checkout.html; do
+            test -s "$file"
+          done
+          node -e "JSON.parse(require('fs').readFileSync('deploy/data/catalog.json', 'utf8'))"
+          if find deploy \( -name '.git*' -o -name '.env*' \) | grep -q .; then
             echo "Unexpected private metadata in deploy payload"; exit 1
           fi
+          # Ensure all referenced first-party scripts and styles exist in the staged payload.
+          grep -q 'assets/shop.js' deploy/store.html
+          grep -q 'assets/cart.js' deploy/store/cart.html
+          grep -q 'assets/checkout.js' deploy/store/checkout.html
       - name: Upload website over FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
