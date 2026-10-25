@@ -61,32 +61,39 @@ jobs:
 
           # The preview lives in a subfolder, so rewrite root-relative paths
           # to paths relative to each HTML page. The live WordPress root is untouched.
-          python3 - <<'PY'
-          from pathlib import Path
-          for name in ("index.html", "store.html", "policies.html"):
-              p = Path("deploy") / name
-              s = p.read_text()
-              s = s.replace('href="/', 'href="./').replace('src="/assets/', 'src="./assets/')
-              p.write_text(s)
-          for name in ("cart.html", "checkout.html"):
-              p = Path("deploy/store") / name
-              s = p.read_text()
-              s = s.replace('href="/assets/', 'href="../assets/')
-              s = s.replace('src="/assets/', 'src="../assets/')
-              s = s.replace('href="/store/cart.html"', 'href="./cart.html"')
-              s = s.replace('href="/store/checkout.html"', 'href="./checkout.html"')
-              s = s.replace('href="/store.html"', 'href="../store.html"')
-              s = s.replace('href="/policies.html"', 'href="../policies.html"')
-              s = s.replace('href="/"', 'href="../"')
-              p.write_text(s)
-          for name in ("storefront.js", "shop.js"):
-              p = Path("deploy/assets") / name
-              s = p.read_text().replace('fetch("/data/catalog.json"', 'fetch("data/catalog.json"')
-              p.write_text(s)
-          # Do not expose WordPress admin links from the preview policy page.
-          p = Path("deploy/policies.html")
-          p.write_text(p.read_text().replace('href="./admin/"', 'href="./"'))
-          PY
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          function replaceFile(file, replacements) {
+            let content = fs.readFileSync(file, 'utf8');
+            for (const [from, to] of replacements) content = content.split(from).join(to);
+            fs.writeFileSync(file, content);
+          }
+          for (const name of ['index.html', 'store.html', 'policies.html']) {
+            replaceFile(path.join('deploy', name), [
+              ['href="/', 'href="./'],
+              ['src="/assets/', 'src="./assets/']
+            ]);
+          }
+          for (const name of ['cart.html', 'checkout.html']) {
+            replaceFile(path.join('deploy/store', name), [
+              ['href="/assets/', 'href="../assets/'],
+              ['src="/assets/', 'src="../assets/'],
+              ['href="/store/cart.html"', 'href="./cart.html"'],
+              ['href="/store/checkout.html"', 'href="./checkout.html"'],
+              ['href="/store.html"', 'href="../store.html"'],
+              ['href="/policies.html"', 'href="../policies.html"'],
+              ['href="/"', 'href="../"']
+            ]);
+          }
+          for (const name of ['storefront.js', 'shop.js']) {
+            replaceFile(path.join('deploy/assets', name), [
+              ['fetch("/data/catalog.json"', 'fetch("data/catalog.json"']
+            ]);
+          }
+          // Do not expose WordPress admin links from the preview policy page.
+          replaceFile('deploy/policies.html', [['href="./admin/"', 'href="./"']]);
+          NODE
 
           for file in deploy/index.html deploy/store.html deploy/policies.html deploy/assets/storefront.css deploy/assets/storefront.js deploy/assets/shop.js deploy/assets/cart.js deploy/assets/checkout.js deploy/data/catalog.json deploy/store/cart.html deploy/store/checkout.html; do
             test -s "$file"
