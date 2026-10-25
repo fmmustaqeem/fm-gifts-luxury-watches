@@ -22,7 +22,169 @@
       "status": "Active"
     },
     {
-      "sku": "DEMO-PERFUME-001",
+      "sku": "DEMO-WATCH-003",
+      "name": "DEMO — Silver Mesh Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2799,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-004",
+      "name": "DEMO — Black Dial Dress Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2299,
+      "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-005",
+      "name": "DEMO — Rose-Gold Accent Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2599,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-006",
+      "name": "DEMO — Leather Strap Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2199,
+      "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-007",
+      "name": "DEMO — Modern Chronograph Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 3299,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-008",
+      "name": "DEMO — Slim Formal Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2399,
+      "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-009",
+      "name": "DEMO — Everyday Steel Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2699,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-010",
+      "name": "DEMO — Midnight Dial Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 1999,
+      "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-011",
+      "name": "DEMO — Two-Tone Bracelet Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2899,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-012",
+      "name": "DEMO — Classic Roman Dial Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2499,
+      "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-013",
+      "name": "DEMO — Minimal White Dial Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 1799,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-014",
+      "name": "DEMO — Sport-Inspired Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2199,
+      "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-015",
+      "name": "DEMO — Elegant Petite Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2399,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-016",
+      "name": "DEMO — Blue Dial Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2599,
+      "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-017",
+      "name": "DEMO — Gold Mesh Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2799,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-018",
+      "name": "DEMO — Brown Leather Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2099,
+      "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-019",
+      "name": "DEMO — Contemporary Square Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 2999,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-WATCH-020",
+      "name": "DEMO — Signature Dress Watch",
+      "brand": "FM Demo Collection",
+      "category": "Watches",
+      "price": 3199,
+      "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-001",
       "name": "DEMO — Signature Fragrance",
       "brand": "FM Demo Collection",
       "category": "Fragrances",
@@ -31,11 +193,173 @@
       "status": "Active"
     },
     {
-      "sku": "DEMO-PERFUME-002",
+      "sku": "DEMO-FRAGRANCE-002",
       "name": "DEMO — Elegant Perfume Gift",
       "brand": "FM Demo Collection",
       "category": "Fragrances",
       "price": 2199,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-003",
+      "name": "DEMO — Amber Woods Scent",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1899,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-004",
+      "name": "DEMO — Fresh Citrus Fragrance",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1499,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-005",
+      "name": "DEMO — Floral Evening Perfume",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1999,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-006",
+      "name": "DEMO — Classic Oud-Inspired Scent",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 2499,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-007",
+      "name": "DEMO — Soft Musk Fragrance",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1699,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-008",
+      "name": "DEMO — Rose Garden Perfume",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1799,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-009",
+      "name": "DEMO — Ocean Breeze Fragrance",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1599,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-010",
+      "name": "DEMO — Warm Vanilla Scent",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1699,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-011",
+      "name": "DEMO — Modern Aromatic Perfume",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 2299,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-012",
+      "name": "DEMO — Spiced Amber Fragrance",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 2199,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-013",
+      "name": "DEMO — White Floral Perfume",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1899,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-014",
+      "name": "DEMO — Fresh Daily Fragrance",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1399,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-015",
+      "name": "DEMO — Velvet Rose Scent",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1999,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-016",
+      "name": "DEMO — Cedar & Spice Fragrance",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 2399,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-017",
+      "name": "DEMO — Golden Hour Perfume",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 2199,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-018",
+      "name": "DEMO — Clean Linen Scent",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 1499,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-019",
+      "name": "DEMO — Midnight Bloom Perfume",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 2299,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-FRAGRANCE-020",
+      "name": "DEMO — Signature Gift Fragrance",
+      "brand": "FM Demo Collection",
+      "category": "Fragrances",
+      "price": 2499,
       "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80",
       "status": "Active"
     },
@@ -49,6 +373,177 @@
       "status": "Active"
     },
     {
+      "sku": "DEMO-GIFT-002",
+      "name": "DEMO — Birthday Surprise Set",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1699,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-003",
+      "name": "DEMO — Anniversary Gift Set",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 2499,
+      "image": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-004",
+      "name": "DEMO — Celebration Gift Hamper",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 2199,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-005",
+      "name": "DEMO — Elegant Keepsake Box",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1499,
+      "image": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-006",
+      "name": "DEMO — Thank-You Gift Set",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1199,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-007",
+      "name": "DEMO — Festive Gift Bundle",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1999,
+      "image": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-008",
+      "name": "DEMO — Luxury Gift Packaging",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 999,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-009",
+      "name": "DEMO — Friendship Gift Set",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1399,
+      "image": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-010",
+      "name": "DEMO — Romantic Gift Box",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 2299,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-011",
+      "name": "DEMO — Congratulations Gift Set",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1799,
+      "image": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-012",
+      "name": "DEMO — Personal Moments Hamper",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1899,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-013",
+      "name": "DEMO — Classic Gift Bundle",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1599,
+      "image": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-014",
+      "name": "DEMO — Special Day Gift Box",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1999,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-015",
+      "name": "DEMO — Family Celebration Set",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 2399,
+      "image": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-016",
+      "name": "DEMO — Corporate Gift Box",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 2799,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-017",
+      "name": "DEMO — Mini Treat Gift Set",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 899,
+      "image": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-018",
+      "name": "DEMO — Signature Gift Hamper",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 2599,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-019",
+      "name": "DEMO — Memorable Moments Box",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 2199,
+      "image": "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-GIFT-020",
+      "name": "DEMO — Thoughtful Gift Bundle",
+      "brand": "FM Demo Collection",
+      "category": "Gifts",
+      "price": 1499,
+      "image": "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
       "sku": "DEMO-ACCESSORY-001",
       "name": "DEMO — Everyday Sunglasses",
       "brand": "FM Demo Collection",
@@ -58,21 +553,174 @@
       "status": "Active"
     },
     {
-      "sku": "DEMO-WALLET-001",
+      "sku": "DEMO-ACCESSORY-002",
       "name": "DEMO — Classic Wallet",
       "brand": "FM Demo Collection",
-      "category": "Wallets",
+      "category": "Accessories",
       "price": 1199,
       "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=900&q=80",
       "status": "Active"
     },
     {
-      "sku": "DEMO-JEWELLERY-001",
+      "sku": "DEMO-ACCESSORY-003",
       "name": "DEMO — Gold-Tone Jewellery",
       "brand": "FM Demo Collection",
-      "category": "Jewellery",
+      "category": "Accessories",
       "price": 1499,
       "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-004",
+      "name": "DEMO — Minimal Bracelet",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 899,
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-005",
+      "name": "DEMO — Everyday Tote Bag",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 1799,
+      "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-006",
+      "name": "DEMO — Classic Keychain",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 499,
+      "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-007",
+      "name": "DEMO — Sleek Card Holder",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 799,
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-008",
+      "name": "DEMO — Fashion Sunglasses",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 1099,
+      "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-009",
+      "name": "DEMO — Elegant Hair Accessory",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 699,
+      "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-010",
+      "name": "DEMO — Minimal Pendant",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 999,
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-011",
+      "name": "DEMO — Travel Accessory Pouch",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 899,
+      "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-012",
+      "name": "DEMO — Classic Belt",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 1299,
+      "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-013",
+      "name": "DEMO — Modern Cuff Bracelet",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 1199,
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-014",
+      "name": "DEMO — Compact Coin Purse",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 699,
+      "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-015",
+      "name": "DEMO — Style Gift Accessory",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 1399,
+      "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-016",
+      "name": "DEMO — Everyday Scarf",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 999,
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-017",
+      "name": "DEMO — Premium Key Ring",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 599,
+      "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-018",
+      "name": "DEMO — Minimal Stud Earrings",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 799,
+      "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-019",
+      "name": "DEMO — Classic Tie Accessory",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 899,
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=80",
+      "status": "Active"
+    },
+    {
+      "sku": "DEMO-ACCESSORY-020",
+      "name": "DEMO — Signature Accessory Set",
+      "brand": "FM Demo Collection",
+      "category": "Accessories",
+      "price": 1899,
+      "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=900&q=80",
       "status": "Active"
     }
   ]
