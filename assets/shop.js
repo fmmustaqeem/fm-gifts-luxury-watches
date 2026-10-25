@@ -26,6 +26,6 @@
   $("searchInput").addEventListener("input",render);$("categoryFilter").addEventListener("change",render);
   const year=$("year");if(year)year.textContent=new Date().getFullYear();
   const menu=$("menuButton"),nav=$("navigation");if(menu&&nav)menu.addEventListener("click",()=>{const opened=nav.classList.toggle("is-open");menu.setAttribute("aria-expanded",String(opened));});
-  fetch("/data/catalog.json",{headers:{Accept:"application/json"}}).then(r=>{if(!r.ok)throw Error("catalog unavailable");return r.json();}).then(data=>{products=Array.isArray(data.products)?data.products:[];render();}).catch(()=>root.replaceChildren(empty("Catalogue unavailable","The product catalogue could not be loaded. Please try again later.")));
+  fetch("data/catalog.json",{headers:{Accept:"application/json"}}).then(r=>{if(!r.ok)throw Error("catalog unavailable");return r.json();}).then(data=>{products=Array.isArray(data.products)?data.products:[];render();}).catch(()=>root.replaceChildren(empty("Catalogue unavailable","The product catalogue could not be loaded. Please try again later.")));
   updateCount();
 })();
