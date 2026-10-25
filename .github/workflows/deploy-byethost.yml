@@ -26,6 +26,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: feat/fresh-luxury-storefront-2026-10-24
+      - name: Set up Node.js for catalog validation
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: Validate static files and isolated target
         shell: bash
         env:
@@ -39,7 +43,6 @@ jobs:
           test -s assets/storefront.css
           test -s assets/storefront.js
           test -s data/catalog.json
-          # Validate JSON with Node.js; the Android runner does not provide python3.
           node -e "JSON.parse(require('fs').readFileSync('data/catalog.json', 'utf8'))"
           test -n "$FTP_SERVER"
           test -n "$FTP_USERNAME"
