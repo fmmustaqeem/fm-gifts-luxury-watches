@@ -49,6 +49,25 @@ jobs:
           test -n "$FTP_PASSWORD"
           # Refuse to deploy into the live WordPress document root.
           test "$FTP_TARGET_DIR" = "htdocs/fm-gifts-preview/"
+      - name: Assemble minimal public storefront
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf deploy
+          mkdir -p deploy/assets deploy/data deploy/store
+          cp index.html store.html policies.html deploy/
+          cp assets/storefront.css assets/storefront.js deploy/assets/
+          cp data/catalog.json deploy/data/
+          # Only public storefront assets are staged; repository metadata and
+          # admin/API source are intentionally excluded from the FTP payload.
+          if [ -d store ]; then cp -R store/. deploy/store/; fi
+          test -s deploy/index.html
+          test -s deploy/assets/storefront.css
+          test -s deploy/assets/storefront.js
+          test -s deploy/data/catalog.json
+          if find deploy -name '.git*' -o -name '.env*' | grep -q .; then
+            echo "Unexpected private metadata in deploy payload"; exit 1
+          fi
       - name: Upload website over FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -57,12 +76,5 @@ jobs:
           password: ${{ secrets.BYETHOST_FTP_PASSWORD }}
           protocol: ftps
           port: 21
-          local-dir: ./
+          local-dir: ./deploy/
           server-dir: ${{ secrets.BYETHOST_FTP_TARGET_DIR }}
-          exclude: |
-            **/.git*
-            **/.github/**
-            **/node_modules/**
-            **/README.md
-            **/.DS_Store
-            **/wrangler.toml
