@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm_deploy:
-        description: "Type DEPLOY to upload the reviewed branch to the configured ByetHost target"
+        description: "Type DEPLOY to upload the reviewed branch to the isolated ByetHost preview folder"
         required: true
         type: string
 
@@ -24,8 +24,13 @@ jobs:
     steps:
       - name: Checkout reviewed branch
         uses: actions/checkout@v4
-      - name: Validate static site files
+      - name: Validate static site files and isolated target
         shell: bash
+        env:
+          FTP_SERVER: ${{ secrets.BYETHOST_FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.BYETHOST_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.BYETHOST_FTP_PASSWORD }}
+          FTP_TARGET_DIR: ${{ secrets.BYETHOST_FTP_TARGET_DIR }}
         run: |
           set -euo pipefail
           test -s index.html
@@ -33,10 +38,11 @@ jobs:
           test -s assets/storefront.js
           test -s data/catalog.json
           python3 -m json.tool data/catalog.json >/dev/null
-          test -n "${{ secrets.BYETHOST_FTP_SERVER }}"
-          test -n "${{ secrets.BYETHOST_FTP_USERNAME }}"
-          test -n "${{ secrets.BYETHOST_FTP_PASSWORD }}"
-          test -n "${{ secrets.BYETHOST_FTP_TARGET_DIR }}"
+          test -n "$FTP_SERVER"
+          test -n "$FTP_USERNAME"
+          test -n "$FTP_PASSWORD"
+          # Refuse to deploy into the live WordPress document root.
+          test "$FTP_TARGET_DIR" = "htdocs/fm-gifts-preview/"
       - name: Upload website over FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
