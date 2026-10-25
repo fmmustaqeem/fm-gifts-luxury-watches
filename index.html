@@ -3,41 +3,58 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#11100e">
-<meta name="description" content="FM Gifts & Luxury Watches — watches, fragrances, thoughtful gifts and accessories.">
-<title>FM Gifts & Luxury Watches</title>
-<link rel="stylesheet" href="/assets/storefront.css">
+<meta name="theme-color" content="#17130f">
+<meta name="description" content="FM Gifts & Luxury Watches — shop watches, fragrances, gifts and accessories.">
+<title>FM Gifts & Luxury Watches | Shop</title>
+<link rel="stylesheet" href="assets/storefront.css">
 </head>
 <body>
-<div class="topline">LUXURY THAT DEFINES YOUR STYLE <span>Pakistan-wide delivery • Order assistance on WhatsApp</span></div>
-<header class="header">
-  <a class="brand" href="/" aria-label="FM Gifts home"><span class="monogram">FM</span><span><b>FM GIFTS</b><small>& LUXURY WATCHES</small></span></a>
-  <button class="menu-button" id="menuButton" aria-expanded="false" aria-controls="navigation">Menu</button>
-  <nav id="navigation"><a href="#collections">Collections</a><a href="/store.html">Shop / Cart</a><a href="#story">Our story</a><a href="/policies.html">Policies</a><a href="#contact">Contact</a></nav>
-  <a class="bag" href="/store.html">Shop / Cart <span>↗</span></a>
+<div class="announcement"><span>FM GIFTS & LUXURY WATCHES</span><span>Thoughtful gifts • Timeless style • Pakistan</span><a href="policies.html">Delivery & policies</a></div>
+<header class="site-header">
+  <button class="icon-button menu-button" id="menuButton" aria-expanded="false" aria-controls="navigation" aria-label="Open menu">☰</button>
+  <a class="brand" href="index.html" aria-label="FM Gifts home"><span class="brand-mark">FM</span><span class="brand-name"><b>FM GIFTS</b><small>& LUXURY WATCHES</small></span></a>
+  <form class="search-bar" id="searchForm" role="search"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search watches, perfumes, gifts…" aria-label="Search products"><button type="submit">Search</button></form>
+  <nav class="header-actions" id="navigation"><a href="#categories">Categories</a><a href="#new-arrivals">New arrivals</a><a href="store.html">Shop</a><a href="policies.html">Help</a></nav>
+  <a class="cart-link" href="store.html" aria-label="Open shop and cart"><span>♧</span><b>Cart</b></a>
 </header>
 <main>
-  <section class="hero">
-    <div class="hero-copy"><p class="eyebrow">THE FM EDIT · 2026</p><h1>Luxury in every<br><em>little detail.</em></h1><p class="intro">Discover thoughtful gifts, timeless watches, signature fragrances and accessories for the moments that matter.</p><div class="hero-actions"><a class="button gold" href="#catalogue">Explore the collection</a><a class="underlink" href="#collections">Browse categories ↗</a></div><div class="hero-foot"><span class="rule"></span> THOUGHTFUL GIFTS. TIMELESS STYLE.</div></div>
-    <div class="hero-visual" aria-label="Abstract gold watch-inspired artwork"><div class="halo"></div><div class="orbit"></div><div class="watch"><div class="strap"></div><div class="dial"><i class="twelve">XII</i><i class="three">III</i><i class="six">VI</i><i class="nine">IX</i><b class="hand h1"></b><b class="hand h2"></b><b class="pin"></b></div></div><div class="visual-caption">MADE TO<br><em>BE REMEMBERED</em></div></div>
-  </section>
-  <section class="benefits" aria-label="Store benefits"><div><b>01</b><span>Curated collections</span></div><div><b>02</b><span>Gift-worthy details</span></div><div><b>03</b><span>Personal order support</span></div></section>
-  <section class="section" id="collections"><div class="section-head"><div><p class="eyebrow">FIND YOUR SOMETHING SPECIAL</p><h2>Shop by <em>category</em></h2></div><p>Pieces for your style. Gifts for your people.</p></div>
-    <div class="category-grid">
-      <button class="category c-watch" data-category="Watches"><span>01 / TIME</span><b>Watches</b><i>↗</i></button>
-      <button class="category c-scent" data-category="Fragrances"><span>02 / SCENT</span><b>Fragrances</b><i>↗</i></button>
-      <button class="category c-gift" data-category="Gifts"><span>03 / MOMENTS</span><b>Gifts</b><i>↗</i></button>
-      <button class="category c-accessory" data-category="Accessories"><span>04 / DETAILS</span><b>Accessories</b><i>↗</i></button>
+  <section class="hero-shell" aria-label="Featured promotions">
+    <div class="hero-slider" id="heroSlider">
+      <article class="hero-slide active slide-one" data-slide="0">
+        <div class="hero-copy"><p class="eyebrow">THE FM SIGNATURE EDIT</p><h1>Make every<br><em>moment matter.</em></h1><p>Thoughtful gifts, timeless watches and signature fragrances — all in one place.</p><a class="primary-button" href="#shop">Explore the collection <span>↗</span></a></div>
+        <div class="hero-art art-watch" aria-hidden="true"><div class="art-ring"></div><div class="art-watch-face"><span>FM</span></div><div class="art-caption">TIMELESS BY DESIGN</div></div>
+      </article>
+      <article class="hero-slide slide-two" data-slide="1">
+        <div class="hero-copy"><p class="eyebrow">GIFTS FOR EVERY OCCASION</p><h1>A little luxury.<br><em>A lasting memory.</em></h1><p>Find a thoughtful pick for birthdays, celebrations and everyday surprises.</p><a class="primary-button" href="#categories">Explore gift ideas <span>↗</span></a></div>
+        <div class="hero-art art-gift" aria-hidden="true"><div class="gift-box"><i></i><b></b></div><div class="art-caption">GIFT WITH MEANING</div></div>
+      </article>
+      <article class="hero-slide slide-three" data-slide="2">
+        <div class="hero-copy"><p class="eyebrow">YOUR STYLE, YOUR SIGNATURE</p><h1>Discover your<br><em>next favourite.</em></h1><p>Browse curated categories and discover the right detail for your style.</p><a class="primary-button" href="#shop">Browse the shop <span>↗</span></a></div>
+        <div class="hero-art art-scent" aria-hidden="true"><div class="perfume-bottle"><span>FM</span></div><div class="art-caption">SCENT. STYLE. STORY.</div></div>
+      </article>
+      <div class="hero-controls"><button id="heroPrev" aria-label="Previous slide">‹</button><div class="slide-dots" id="slideDots"><button class="active" data-go="0" aria-label="Slide 1"></button><button data-go="1" aria-label="Slide 2"></button><button data-go="2" aria-label="Slide 3"></button></div><button id="heroNext" aria-label="Next slide">›</button></div>
     </div>
   </section>
-  <section class="section catalogue" id="catalogue"><div class="section-head"><div><p class="eyebrow">THE FM COLLECTION</p><h2>Featured <em>finds</em></h2></div><span class="inventory-label">VERIFIED INVENTORY ONLY</span></div>
-    <div class="catalog-tools"><label class="search"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search products, brands…" aria-label="Search products"></label><label class="select-wrap"><span class="sr-only">Filter category</span><select id="categoryFilter"><option value="">All categories</option><option>Watches</option><option>Fragrances</option><option>Gifts</option><option>Accessories</option></select></label></div>
-    <div class="product-grid" id="productGrid" aria-live="polite"><div class="empty-state"><span class="empty-mark">FM</span><h3>Our collection is being prepared.</h3><p>Products will appear here when verified inventory details, photos and prices are connected. We won't publish made-up product listings.</p></div></div>
-  </section>
-  <section class="editorial" id="story"><div class="seal">FM<span>CURATED</span></div><div><p class="eyebrow">THE ART OF GIFTING</p><h2>Make the moment<br><em>mean more.</em></h2><p>From everyday style to milestone celebrations, FM Gifts is being built around considered choices and a more personal shopping experience.</p><a class="button outline" href="#contact">Talk to our team</a></div></section>
-  <section class="contact" id="contact"><p class="eyebrow">NEED A HAND?</p><h2>Let’s find the <em>right gift.</em></h2><p>Message us about product availability, gifting or an order.</p><a class="button gold" href="https://wa.me/923122972922" target="_blank" rel="noopener noreferrer">Chat on WhatsApp ↗</a></section>
+  <section class="service-strip" aria-label="Shopping information"><div><span>✓</span><b>Carefully selected</b><small>Thoughtful finds</small></div><div><span>↗</span><b>Order assistance</b><small>Help when you need it</small></div><div><span>PKR</span><b>Clear pricing</b><small>Prices shown in rupees</small></div><div><span>♡</span><b>Made for gifting</b><small>For every occasion</small></div></section>
+  <section class="content-section promo-section" id="promotions"><div class="section-title"><div><p class="eyebrow">GOOD FINDS, BEAUTIFULLY PRESENTED</p><h2>Offers & <em>highlights</em></h2></div><span class="section-note">Promotions appear when verified</span></div><div class="promo-grid"><a class="promo-card promo-gold" href="#new-arrivals"><span class="promo-label">THE NEW EDIT</span><strong>Discover<br>what’s new.</strong><span class="promo-link">Explore arrivals ↗</span><span class="promo-decoration deco-circle"></span></a><a class="promo-card promo-dark" href="#categories"><span class="promo-label">GIFTING MADE PERSONAL</span><strong>Find the right<br>kind of lovely.</strong><span class="promo-link">Shop gift ideas ↗</span><span class="promo-decoration deco-gift">FM</span></a></div></section>
+  <section class="content-section" id="categories"><div class="section-title"><div><p class="eyebrow">START WITH WHAT YOU LOVE</p><h2>Shop by <em>category</em></h2></div><div class="slider-arrows"><button id="categoryPrev" aria-label="Scroll categories left">‹</button><button id="categoryNext" aria-label="Scroll categories right">›</button></div></div><div class="category-rail" id="categoryRail">
+    <a class="category-card" href="store.html?category=Watches"><span class="category-thumb thumb-watch">⌚</span><b>Watches</b><small>Timeless style</small></a>
+    <a class="category-card" href="store.html?category=Fragrances"><span class="category-thumb thumb-scent">♧</span><b>Perfumes</b><small>Your signature scent</small></a>
+    <a class="category-card" href="store.html?category=Gifts"><span class="category-thumb thumb-gift">♙</span><b>Gifts</b><small>Make it memorable</small></a>
+    <a class="category-card" href="store.html?category=Accessories"><span class="category-thumb thumb-accessory">◇</span><b>Accessories</b><small>Finishing touches</small></a>
+    <a class="category-card" href="store.html?category=Kids"><span class="category-thumb thumb-kids">☆</span><b>Kids</b><small>Little joys</small></a>
+    <a class="category-card" href="store.html?category=Wallets"><span class="category-thumb thumb-wallet">▤</span><b>Wallets</b><small>Everyday essentials</small></a>
+    <a class="category-card" href="store.html?category=Jewellery"><span class="category-thumb thumb-jewellery">✧</span><b>Jewellery</b><small>A little sparkle</small></a>
+    <a class="category-card" href="store.html?category=All"><span class="category-thumb thumb-all">＋</span><b>All products</b><small>Explore the shop</small></a>
+  </div></section>
+  <section class="content-section product-section" id="flash-sale"><div class="section-title"><div><p class="eyebrow">LIMITED-TIME OFFERS</p><h2>Flash <em>Sale</em></h2></div><span class="status-pill">Offers will appear when confirmed</span></div><div class="product-empty compact-empty"><span class="empty-symbol">%</span><div><h3>Great deals are being prepared.</h3><p>Only verified sale prices and genuine offer periods will be displayed here.</p></div><a class="text-link" href="store.html">Browse shop ↗</a></div></section>
+  <section class="content-section product-section" id="new-arrivals"><div class="section-title"><div><p class="eyebrow">FRESH TO THE COLLECTION</p><h2>New <em>arrivals</em></h2></div><div class="slider-arrows"><button id="arrivalPrev" aria-label="Scroll new arrivals left">‹</button><button id="arrivalNext" aria-label="Scroll new arrivals right">›</button></div></div><div class="product-rail" id="arrivalRail"><div class="product-empty"><span class="empty-symbol">FM</span><h3>New arrivals are on their way.</h3><p>Products will appear here after verified photos, prices and stock are added.</p><a class="text-link" href="store.html">View the shop ↗</a></div></div></section>
+  <section class="content-section product-section" id="shop"><div class="section-title"><div><p class="eyebrow">EXPLORE THE COLLECTION</p><h2>Shop <em>all products</em></h2></div><a class="text-link" href="store.html">Open full shop ↗</a></div><div class="catalog-tools"><label class="search-inline"><span>⌕</span><input id="shopSearch" type="search" placeholder="Search products…" aria-label="Search shop"></label><label class="select-inline"><span class="sr-only">Filter by category</span><select id="categoryFilter"><option value="">All categories</option><option>Watches</option><option>Fragrances</option><option>Gifts</option><option>Accessories</option><option>Kids</option></select></label></div><div class="product-grid" id="productGrid" aria-live="polite"><div class="product-empty"><span class="empty-symbol">FM</span><h3>Your collection starts here.</h3><p>The product catalogue is currently awaiting verified inventory. No made-up products or prices will be shown.</p></div></div><div class="load-more-wrap"><a class="secondary-button" href="store.html">Browse full shop</a></div></section>
+  <section class="editorial-band"><div class="editorial-stamp">FM<span>GIFTS</span></div><div><p class="eyebrow">THE ART OF GIVING</p><h2>Small details.<br><em>Meaningful moments.</em></h2><p>From everyday essentials to special celebrations, find a gift that feels personal.</p></div><a class="primary-button" href="store.html">Explore the shop ↗</a></section>
+  <section class="contact-band"><div><p class="eyebrow">NEED HELP CHOOSING?</p><h2>Let’s find the <em>right gift.</em></h2><p>Ask us about product availability, gifting and orders.</p></div><a class="primary-button" href="https://wa.me/923122972922" target="_blank" rel="noopener noreferrer">Chat on WhatsApp ↗</a></section>
 </main>
-<footer><a class="brand" href="/"><span class="monogram">FM</span><span><b>FM GIFTS</b><small>& LUXURY WATCHES</small></span></a><p>Luxury that defines your style.</p><nav class="footer-links"><a href="/store.html">Shop / Account / Cart</a><a href="/policies.html">Policies</a><a href="#contact">Contact</a></nav><small>© <span id="year"></span> FM Gifts & Luxury Watches</small></footer>
-<script src="/assets/storefront.js" defer></script>
+<footer class="site-footer"><a class="brand" href="index.html"><span class="brand-mark">FM</span><span class="brand-name"><b>FM GIFTS</b><small>& LUXURY WATCHES</small></span></a><p>Thoughtful gifts. Timeless style.</p><nav><a href="store.html">Shop</a><a href="policies.html">Delivery & policies</a><a href="#categories">Categories</a><a href="https://wa.me/923122972922" target="_blank" rel="noopener noreferrer">Contact</a></nav><small>© <span id="year"></span> FM Gifts & Luxury Watches</small></footer>
+<nav class="mobile-bottom" aria-label="Mobile navigation"><a href="index.html"><span>⌂</span>Home</a><a href="#categories"><span>▦</span>Categories</a><a href="store.html"><span>♧</span>Shop / Cart</a><a href="policies.html"><span>☰</span>Help</a></nav>
+<script src="assets/storefront.js" defer></script>
 </body>
 </html>
