@@ -73,7 +73,11 @@ jobs:
               s = p.read_text()
               s = s.replace('href="/assets/', 'href="../assets/')
               s = s.replace('src="/assets/', 'src="../assets/')
-              s = s.replace('href="/', 'href="../')
+              s = s.replace('href="/store/cart.html"', 'href="./cart.html"')
+              s = s.replace('href="/store/checkout.html"', 'href="./checkout.html"')
+              s = s.replace('href="/store.html"', 'href="../store.html"')
+              s = s.replace('href="/policies.html"', 'href="../policies.html"')
+              s = s.replace('href="/"', 'href="../"')
               p.write_text(s)
           for name in ("storefront.js", "shop.js"):
               p = Path("deploy/assets") / name
