@@ -107,7 +107,7 @@ jobs:
           grep -q 'assets/cart.js' deploy/store/cart.html
           grep -q 'assets/checkout.js' deploy/store/checkout.html
       - name: Upload website over FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.BYETHOST_FTP_SERVER }}
           username: ${{ secrets.BYETHOST_FTP_USERNAME }}
