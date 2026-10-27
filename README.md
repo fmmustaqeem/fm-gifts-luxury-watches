@@ -10,7 +10,7 @@ FM Gifts & Luxury Watches keeps its local project history and implementation rec
 ### Project Identity
 - Project: FM Gifts & Luxury Watches
 - Repository: `fmmustaqeem/fm-gifts-luxury-watches`
-- Deployment: Cloudflare Pages
+- Hosting target: ByetHost isolated static preview (`htdocs/fm-gifts-preview/`); not yet deployed
 - Production branch: `main`
 - Control-plane status: Registered
 - Default worker access: read-only
