@@ -53,3 +53,80 @@
 .demo-label{display:inline-block;margin-top:8px;padding:3px 6px;border:1px solid #c7a15b60;color:var(--gold);font-size:8px;letter-spacing:.08em}
 @media(max-width:760px){.arrival-rail-wrap{grid-template-columns:28px minmax(0,1fr) 28px;gap:6px}.rail-control{width:28px;height:34px}.arrival-rail{grid-auto-columns:calc((100% - 12px)/2);gap:12px}.arrival-rail .product-image{height:160px}}
 @media(max-width:420px){.arrival-rail{grid-auto-columns:82%;gap:10px}.arrival-rail .product-image{height:190px}}
+
+
+/* FM Gifts light luxury theme — full-site palette refresh */
+:root{
+ --bg:#fbfaf7;--panel:#ffffff;--gold:#b98736;--pale:#ead7ad;--cream:#292821;
+ --muted:#6e6a60;--line:#d9c7a6;--serif:Georgia,"Times New Roman",serif;
+ color-scheme:light;
+}
+html{background:var(--bg)}
+body{background:var(--bg);color:#292821}
+.topline{background:#f2eadb;color:#302b22;letter-spacing:.04em;font-size:10px}
+.header{background:rgba(255,255,255,.96);border-bottom:1px solid #e9e1d4;box-shadow:0 3px 18px #45361b08}
+.brand .monogram{border:0;color:var(--gold);font-size:34px;width:48px;height:48px}
+.brand b{font-size:12px;color:#3b3020;letter-spacing:.11em}
+.brand small{color:#80602e;font-size:9px}
+.header nav{color:#33352f}
+.header nav a:hover,.header nav a:focus-visible{color:#a16e1e}
+.bag{background:#b98736;color:#fff;border:1px solid #b98736}
+.bag span{color:#fff}
+.menu-button{color:#292821;border-color:#d9c7a6}
+.hero{background:radial-gradient(ellipse at 80% 35%,#f0e2c8 0%,#fbf8f1 45%,#fff 100%);color:#292821}
+.hero h1{color:#292821}
+.hero h1 em,.section h2 em,.editorial h2 em,.contact h2 em{color:#a7792e}
+.eyebrow{color:#a7792e}
+.intro{color:#625d53}
+.hero-foot{color:#756f63}
+.rule{background:#b98736}
+.halo{background:linear-gradient(135deg,#ead8b4,#fffaf0 70%);border-color:#c7a15b70;box-shadow:0 0 80px #c7a15b16}
+.orbit{border-color:#b9873670}
+.strap{background:repeating-linear-gradient(0deg,#8e6a31 0 12px,#e0bf77 13px 15px,#c19a50 16px 23px)}
+.dial{background:radial-gradient(circle at 35% 25%,#5b513d,#25231f 72%);border-color:#b89350}
+.visual-caption{color:#946a28}
+.visual-caption em{color:#736957}
+.benefits{background:#fff;border-color:#e8dfd1}
+.benefits div{color:#555247}
+.benefits b{color:#a7792e}
+.section{background:#fbfaf7}
+.section-head>p{color:#6e6a60}
+.category{color:#292821;background:linear-gradient(145deg,#fffdf9,#f1e8d8);border-color:#e4d6bd;box-shadow:0 6px 20px #4b3b1b08}
+.category:before{border-color:#b9873670;box-shadow:0 0 0 13px #b9873608,0 0 0 26px #b9873605}
+.category span{color:#9a6d28}
+.category i{color:#9a6d28}
+.category:hover{border-color:#b98736;background:#fff}
+.underlink{color:#946a28;border-color:#d9c7a6}
+.catalogue{background:#f5f0e7;color:#292821}
+.inventory-label{color:#946a28;border-color:#d9c7a6}
+.search{background:#fff;border-color:#ded4c4}
+.search span{color:#a7792e}
+.search input{color:#292821}
+.search input::placeholder{color:#888174}
+.select-wrap select{background:#fff;color:#292821;border-color:#ded4c4}
+.product-card{background:#fff;border-color:#e5dccd;box-shadow:0 5px 18px #3428120a}
+.product-image{background:radial-gradient(circle at 50% 40%,#f8f0df,#eee5d6 70%);color:#a7792e}
+.product-details h3{color:#292821}
+.product-category{color:#946a28}
+.product-price{color:#77551e}
+.demo-label{display:inline-block;margin-top:7px;color:#7c5d27;background:#f6eddb;border:1px solid #e6d4ad;padding:3px 6px;font-size:8px;letter-spacing:.06em}
+.empty-state{background:#fff;border-color:#e5dccd;color:#6e6a60}
+.empty-state h2,.empty-state h3{color:#292821}
+.empty-state p{color:#6e6a60}
+.empty-mark{border-color:#b98736;color:#a7792e}
+.editorial{background:linear-gradient(105deg,#f1e6d2,#fffdf9 75%);border-color:#e3d6c1;color:#292821}
+.seal{border-color:#b98736;color:#a7792e}
+.editorial p:not(.eyebrow),.contact p:not(.eyebrow){color:#6e6a60}
+.outline{border-color:#b98736;color:#8a6225}
+.outline:hover{background:#b98736;color:#fff}
+.contact{background:#fff;color:#292821}
+footer{background:#f4eee3;border-color:#e3d6c1;color:#292821}
+footer p,footer>small{color:#6e6a60}
+.footer-links a:hover{color:#a16e1e}
+.cart-panel{background:#fff;border-color:#e5dccd;color:#292821}
+.cart-row{border-color:#e5dccd}
+@media(max-width:620px){
+ .header nav{background:#fff;border-color:#e3d6c1;box-shadow:0 12px 20px #34281212}
+ .hero{background:radial-gradient(ellipse at 70% 65%,#f0e2c8 0%,#fbf8f1 50%,#fff 100%)}
+ .editorial{background:linear-gradient(105deg,#f1e6d2,#fffdf9 75%)}
+}
