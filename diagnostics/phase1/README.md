@@ -20,7 +20,7 @@ This is a temporary, isolated connectivity probe. It is not a storefront deploym
 
 1. On your device, generate 32 lowercase hexadecimal characters using a trusted local random generator (for example, `openssl rand -hex 16` where OpenSSL is available).
 2. Create `htdocs/fm-gifts-preview/.state/token` using your hosting File Manager.
-3. Put exactly one line in the file: `TOKEN|2026-10-28T01:00:00Z`, replacing TOKEN with the generated 32-character value and choosing an expiry in the near future (UTC).
+3. Put exactly one line in the file: `TOKEN|YYYY-MM-DDTHH:MM:SSZ`, replacing TOKEN with the generated 32-character value and the timestamp with an actual near-future UTC expiry (for example, 30–60 minutes after setup). Do not copy the placeholder timestamp literally.
 4. Create `htdocs/fm-gifts-preview/.state/.htaccess` from the package's `state/.htaccess`. If the host ignores `.htaccess`, stop and remove the diagnostic files; do not continue.
 
 ## Test
