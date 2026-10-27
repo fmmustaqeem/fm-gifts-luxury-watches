@@ -1,1 +1,71 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FM Gifts Shop</title><style>body{font-family:Arial;max-width:1100px;margin:auto;padding:24px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{border:1px solid #ddd;border-radius:12px;padding:14px}.card img{width:100%;height:170px;object-fit:contain}.price{font-weight:bold;font-size:18px}.muted{color:#666}</style></head><body><p><a href="">← Store</a></p><h1>FM Gifts & Luxury Watches</h1><div id="grid" class="grid"></div><script>(function(){const p=JSON.parse(localStorage.getItem("fm-products")||"[]"),m=JSON.parse(localStorage.getItem("fm-product-media")||"[]"),g=document.getElementById("grid");g.innerHTML=p.filter(x=>x.status==="Active").map(x=>{const im=m.find(y=>y.sku===x.sku&&y.type==="Image");return "<article class='card'>"+(im?"<img src='"+im.url+"' alt='"+(im.alt||x.name)+"'>":"<div class='muted'>No image</div>")+"<h2>"+x.name+"</h2><p>"+(x.brand||"")+" · "+(x.category||"")+"</p><p class='price'>PKR "+x.price+"</p><button onclick='alert("Buy Now: "+x.sku+"")'>Buy Now</button></article>"}).join("")||"<p>No approved active products published yet.</p>"})()</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FM Gifts Shop — Catalogue Preview</title>
+  <style>
+    body{font-family:Arial,sans-serif;max-width:1100px;margin:auto;padding:24px;color:#211d16}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .card{border:1px solid #ddd;border-radius:12px;padding:14px}
+    .card img{width:100%;height:170px;object-fit:contain}
+    .price{font-weight:bold;font-size:18px}.muted{color:#666}
+    .button{display:inline-block;padding:10px 14px;border-radius:7px;background:#c8a45d;color:#17130d;text-decoration:none;font-weight:700}
+    .notice{padding:12px;border:1px solid #c8a45d;border-radius:8px;background:#fff9e9}
+  </style>
+</head>
+<body>
+  <p><a href="../">← Store</a></p>
+  <h1>FM Gifts &amp; Luxury Watches</h1>
+  <p class="notice">Catalogue preview only. Browser-stored product records are not verified inventory; no orders or payments can be made here.</p>
+  <div id="grid" class="grid" aria-live="polite"></div>
+  <script>
+  (function(){
+    'use strict';
+    const root=document.getElementById('grid');
+    function readList(key){
+      try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value:[];}
+      catch(error){return [];}
+    }
+    function safeImageUrl(value){
+      if(typeof value!=='string'||!value.trim())return '';
+      try{const url=new URL(value,location.href);return ['https:','http:'].includes(url.protocol)?url.href:'';}
+      catch(error){return '';}
+    }
+    function node(tag,className,text){
+      const el=document.createElement(tag);
+      if(className)el.className=className;
+      if(text!==undefined)el.textContent=String(text);
+      return el;
+    }
+    const products=readList('fm-products').filter(item=>item&&item.status==='Active');
+    const media=readList('fm-product-media');
+    if(!products.length){
+      root.append(node('p','muted','No approved active products published in this browser yet.'));
+      return;
+    }
+    products.forEach(product=>{
+      const card=node('article','card');
+      const imageRecord=media.find(item=>item&&item.sku===product.sku&&item.type==='Image');
+      const imageUrl=imageRecord?safeImageUrl(imageRecord.url):'';
+      if(imageUrl){
+        const image=node('img','','');
+        image.src=imageUrl;image.alt=String(imageRecord.alt||product.name||'Product image');image.loading='lazy';
+        card.append(image);
+      }else{
+        card.append(node('div','muted','No safe image available'));
+      }
+      card.append(node('h2','',product.name||'Untitled product'));
+      card.append(node('p','',[(product.brand||''),(product.category||'')].filter(Boolean).join(' · ')));
+      const price=Number(product.price);
+      card.append(node('p','price',Number.isFinite(price)&&price>=0?'PKR '+price.toLocaleString('en-PK'):'Price to be confirmed'));
+      card.append(node('p','muted','Preview item — not verified stock'));
+      const link=node('a','button','View details');
+      link.href='product.html?sku='+encodeURIComponent(String(product.sku||''));
+      card.append(link);
+      root.append(card);
+    });
+  }());
+  </script>
+</body>
+</html>
