@@ -14,7 +14,7 @@ $stateDir = __DIR__ . '/.state';
 $tokenPath = $stateDir . '/token';
 $countPath = $stateDir . '/count';
 
-function failClosed(): never {
+function failClosed(): void {
     http_response_code(404);
     header('Content-Type: text/plain; charset=utf-8');
     echo "Not found\n";
@@ -73,7 +73,7 @@ $body = json_decode($raw === false ? '' : $raw, true);
 if (!is_array($body) || ($body['ping'] ?? null) !== 'pong') {
     http_response_code(400);
     header('Content-Type: application/json; charset=utf-8');
-    echo '{"ok":false,"error":"expected JSON {"ping":"pong"}"}';
+    echo json_encode(['ok' => false, 'error' => 'expected JSON body {"ping":"pong"}'], JSON_UNESCAPED_SLASHES);
     exit;
 }
 
