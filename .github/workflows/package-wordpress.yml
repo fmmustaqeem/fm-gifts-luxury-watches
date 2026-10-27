@@ -1,0 +1,45 @@
+name: Package FM Gifts WordPress ZIPs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP for syntax checks
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: none
+
+      - name: Lint theme and plugin PHP
+        run: |
+          set -euo pipefail
+          find wordpress/wp-content/themes/fm-gifts-luxury wordpress/wp-content/plugins/fm-gifts-core -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Build installable ZIP files
+        run: |
+          set -euo pipefail
+          test -f wordpress/wp-content/themes/fm-gifts-luxury/style.css
+          test -f wordpress/wp-content/plugins/fm-gifts-core/fm-gifts-core.php
+          cd wordpress/wp-content/themes
+          zip -qr "$GITHUB_WORKSPACE/fm-gifts-luxury-theme.zip" fm-gifts-luxury
+          cd "$GITHUB_WORKSPACE/wordpress/wp-content/plugins"
+          zip -qr "$GITHUB_WORKSPACE/fm-gifts-core-plugin.zip" fm-gifts-core
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fm-gifts-wordpress-installers
+          path: |
+            fm-gifts-luxury-theme.zip
+            fm-gifts-core-plugin.zip
+          if-no-files-found: error
+          retention-days: 14
