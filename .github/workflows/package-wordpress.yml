@@ -19,20 +19,22 @@ jobs:
           php-version: '8.3'
           tools: none
 
-      - name: Lint theme and plugin PHP
+      - name: Lint theme and plugins
         run: |
           set -euo pipefail
-          find wordpress/wp-content/themes/fm-gifts-luxury wordpress/wp-content/plugins/fm-gifts-core -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+          find wordpress/wp-content/themes/fm-gifts-luxury wordpress/wp-content/plugins/fm-gifts-core wordpress/wp-content/plugins/fm-gifts-ai -type f -name '*.php' -print0 | xargs -0 -n1 php -l
 
       - name: Build installable ZIP files
         run: |
           set -euo pipefail
           test -f wordpress/wp-content/themes/fm-gifts-luxury/style.css
           test -f wordpress/wp-content/plugins/fm-gifts-core/fm-gifts-core.php
+          test -f wordpress/wp-content/plugins/fm-gifts-ai/fm-gifts-ai.php
           cd wordpress/wp-content/themes
           zip -qr "$GITHUB_WORKSPACE/fm-gifts-luxury-theme.zip" fm-gifts-luxury
           cd "$GITHUB_WORKSPACE/wordpress/wp-content/plugins"
           zip -qr "$GITHUB_WORKSPACE/fm-gifts-core-plugin.zip" fm-gifts-core
+          zip -qr "$GITHUB_WORKSPACE/fm-gifts-ai-plugin.zip" fm-gifts-ai
 
       - name: Upload ZIP artifact
         uses: actions/upload-artifact@v4
@@ -41,5 +43,6 @@ jobs:
           path: |
             fm-gifts-luxury-theme.zip
             fm-gifts-core-plugin.zip
+            fm-gifts-ai-plugin.zip
           if-no-files-found: error
           retention-days: 14
