@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm_deploy:
-        description: "Type DEPLOY to upload the reviewed branch to the isolated ByetHost preview folder"
+        description: "Type DEPLOY to upload the reviewed static preview to the isolated ByetHost preview folder"
         required: true
         type: string
 
@@ -24,7 +24,34 @@ jobs:
     steps:
       - name: Checkout reviewed branch
         uses: actions/checkout@v4
-      - name: Validate static site files and isolated target
+
+      - name: Stage only approved static preview files
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf dist
+          mkdir -p dist/assets dist/data dist/store
+          cp index.html store.html policies.html dist/
+          cp assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js dist/assets/
+          cp data/catalog.json dist/data/
+          cp store/cart.html store/checkout.html dist/store/
+          test -s dist/index.html
+          test -s dist/store.html
+          test -s dist/policies.html
+          test -s dist/assets/storefront.css
+          test -s dist/assets/storefront.js
+          test -s dist/assets/shop.js
+          test -s dist/assets/cart.js
+          test -s dist/assets/checkout.js
+          test -s dist/data/catalog.json
+          test -s dist/store/cart.html
+          test -s dist/store/checkout.html
+          python3 -m json.tool dist/data/catalog.json >/dev/null
+          # Never include repository metadata, workflows, or WordPress code in the upload directory.
+          test ! -e dist/.github
+          test ! -e dist/wordpress
+
+      - name: Validate FTPS credentials and isolated target
         shell: bash
         env:
           FTP_SERVER: ${{ secrets.BYETHOST_FTP_SERVER }}
@@ -33,17 +60,13 @@ jobs:
           FTP_TARGET_DIR: ${{ secrets.BYETHOST_FTP_TARGET_DIR }}
         run: |
           set -euo pipefail
-          test -s index.html
-          test -s assets/storefront.css
-          test -s assets/storefront.js
-          test -s data/catalog.json
-          python3 -m json.tool data/catalog.json >/dev/null
           test -n "$FTP_SERVER"
           test -n "$FTP_USERNAME"
           test -n "$FTP_PASSWORD"
           # Refuse to deploy into the live WordPress document root.
           test "$FTP_TARGET_DIR" = "htdocs/fm-gifts-preview/"
-      - name: Upload website over FTPS
+
+      - name: Upload staged static preview over FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.BYETHOST_FTP_SERVER }}
@@ -51,12 +74,5 @@ jobs:
           password: ${{ secrets.BYETHOST_FTP_PASSWORD }}
           protocol: ftps
           port: 21
-          local-dir: ./
+          local-dir: ./dist/
           server-dir: ${{ secrets.BYETHOST_FTP_TARGET_DIR }}
-          exclude: |
-            **/.git*
-            **/.github/**
-            **/node_modules/**
-            **/README.md
-            **/.DS_Store
-            **/wrangler.toml
