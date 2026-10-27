@@ -25,7 +25,7 @@ jobs:
       - name: Checkout reviewed branch
         uses: actions/checkout@v4
 
-      - name: Stage only approved static preview files
+      - name: Stage approved static preview only
         shell: bash
         run: |
           set -euo pipefail
@@ -33,24 +33,37 @@ jobs:
           mkdir -p dist/assets dist/data dist/store
           cp index.html store.html policies.html dist/
           cp assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js dist/assets/
-          # Keep demo SKUs/prices out of any publicly reachable preview.
-          printf '{\n  "schemaVersion": 1,\n  "currency": "PKR",\n  "status": "verified_inventory_required",\n  "products": []\n}\n' > dist/data/catalog.json
           cp store/cart.html store/checkout.html dist/store/
-          test -s dist/index.html
-          test -s dist/store.html
-          test -s dist/policies.html
-          test -s dist/assets/storefront.css
-          test -s dist/assets/storefront.js
-          test -s dist/assets/shop.js
-          test -s dist/assets/cart.js
-          test -s dist/assets/checkout.js
-          test -s dist/data/catalog.json
-          test -s dist/store/cart.html
-          test -s dist/store/checkout.html
+          # Never publish demo SKUs or unverified prices.
+          printf '{\n  "schemaVersion": 1,\n  "currency": "PKR",\n  "status": "verified_inventory_required",\n  "products": []\n}\n' > dist/data/catalog.json
+
+          # Validate every expected file and the empty, safe catalogue.
+          for file in index.html store.html policies.html assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js store/cart.html store/checkout.html data/catalog.json; do
+            test -s "$file"
+          done
+          for file in dist/index.html dist/store.html dist/policies.html dist/assets/storefront.css dist/assets/storefront.js dist/assets/shop.js dist/assets/cart.js dist/assets/checkout.js dist/data/catalog.json dist/store/cart.html dist/store/checkout.html; do
+            test -s "$file"
+          done
           python3 -m json.tool dist/data/catalog.json >/dev/null
-          # Never include repository metadata, workflows, or WordPress code in the upload directory.
+          python3 - <<'PY'
+          import json
+          with open("dist/data/catalog.json", encoding="utf-8") as f:
+              data = json.load(f)
+          assert data.get("status") == "verified_inventory_required"
+          assert data.get("products") == [], "Public preview must not contain demo or unverified products"
+          PY
+
+          # Paths are intentionally relative in the HTML, so the preview works under /fm-gifts-preview/.
+          ! grep -R -E 'href="/|src="/' dist --include='*.html'
+          grep -q 'assets/storefront.js' dist/index.html
+          grep -q 'assets/shop.js' dist/store.html
+          grep -q '../assets/cart.js' dist/store/cart.html
+          grep -q '../assets/checkout.js' dist/store/checkout.html
+
+          # Only the explicit static allowlist is staged; no repository or WordPress files.
           test ! -e dist/.github
           test ! -e dist/wordpress
+          test "$(find dist -type f | wc -l | tr -d ' ')" = "11"
 
       - name: Validate FTPS credentials and isolated target
         shell: bash
@@ -64,7 +77,7 @@ jobs:
           test -n "$FTP_SERVER"
           test -n "$FTP_USERNAME"
           test -n "$FTP_PASSWORD"
-          # Refuse to deploy into the live WordPress document root.
+          # Refuse any upload into the live WordPress document root.
           test "$FTP_TARGET_DIR" = "htdocs/fm-gifts-preview/"
 
       - name: Upload staged static preview over FTPS
