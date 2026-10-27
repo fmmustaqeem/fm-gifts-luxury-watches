@@ -1,1 +1,69 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FM Gifts & Luxury Watches — Order Tracking</title><style>body{font-family:Arial;max-width:850px;margin:auto;padding:24px}.box{border:1px solid #ddd;border-radius:12px;padding:18px;margin:16px 0}input,button{padding:11px;margin:4px}#status{font-size:20px;font-weight:700}.muted{color:#666}</style></head><body><h1>FM Gifts & Luxury Watches — Order Tracking</h1><div class="box"><input id="id" placeholder="Order ID"><button onclick="track()">Track Order</button></div><div id="result"></div><script>function track(){const id=document.getElementById("id").value.trim(),orders=JSON.parse(localStorage.getItem("fm-gifts-orders")||"[]"),o=orders.find(x=>x.id===id),r=document.getElementById("result");if(!o){r.innerHTML="<div class='box'>Order not found.</div>";return}r.innerHTML="<div class='box'><h2>"+o.id+"</h2><p id='status'>"+(o.status||"Pending")+"</p><p><b>Courier:</b> "+(o.delivery&&o.delivery.courier||o.courier||"Pending assignment")+"</p><p><b>Tracking:</b> "+(o.delivery&&o.delivery.tracking||o.tracking||"Pending")+"</p><p><b>Delivery:</b> "+(o.customer.area||o.customer.address)+"</p><p class='muted'>Created "+o.createdAt+"</p></div>"}</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FM Gifts &amp; Luxury Watches — Order Tracking Preview</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:850px;margin:auto;padding:24px;color:#211d16}
+.box{border:1px solid #ddd;border-radius:12px;padding:18px;margin:16px 0}
+input,button{padding:11px;margin:4px}
+#status{font-size:20px;font-weight:700}.muted{color:#666}
+.notice{padding:12px;border:1px solid #c8a45d;border-radius:8px;background:#fff9e9}
+</style>
+</head>
+<body>
+<h1>FM Gifts &amp; Luxury Watches — Order Tracking</h1>
+<p class="notice">Preview only. This page checks browser-local demo data, not a live order system.</p>
+<div class="box">
+<label for="orderId">Order ID</label>
+<input id="orderId" autocomplete="off" maxlength="100" placeholder="Order ID">
+<button id="trackButton" type="button">Track Order</button>
+</div>
+<div id="result" aria-live="polite"></div>
+<script>
+(function(){
+  'use strict';
+  const idInput=document.getElementById('orderId');
+  const result=document.getElementById('result');
+  function node(tag,className,text){
+    const el=document.createElement(tag);
+    if(className)el.className=className;
+    if(text!==undefined)el.textContent=String(text);
+    return el;
+  }
+  function readOrders(){
+    try{
+      const value=JSON.parse(localStorage.getItem('fm-gifts-orders')||'[]');
+      return Array.isArray(value)?value:[];
+    }catch(error){return [];}
+  }
+  function addDetail(parent,label,value){
+    const p=node('p','');
+    p.append(node('strong','',label+': '),document.createTextNode(String(value||'Pending')));
+    parent.append(p);
+  }
+  function track(){
+    const id=idInput.value.trim();
+    result.replaceChildren();
+    if(!id){result.append(node('div','box','Enter an order ID to search this browser’s demo records.'));return;}
+    const order=readOrders().find(item=>item&&String(item.id||'')===id);
+    if(!order){result.append(node('div','box','Order not found in this browser’s demo records.'));return;}
+    const box=node('div','box');
+    box.append(node('h2','',order.id||'Order'));
+    box.append(node('p','', 'Preview status: '+String(order.status||'Pending')));
+    const delivery=order.delivery&&typeof order.delivery==='object'?order.delivery:{};
+    const customer=order.customer&&typeof order.customer==='object'?order.customer:{};
+    addDetail(box,'Courier',delivery.courier||order.courier);
+    addDetail(box,'Tracking',delivery.tracking||order.tracking);
+    addDetail(box,'Delivery address',customer.area||customer.address);
+    addDetail(box,'Created',order.createdAt);
+    box.append(node('p','muted','Local demo record only; this is not verified server-side tracking.'));
+    result.append(box);
+  }
+  document.getElementById('trackButton').addEventListener('click',track);
+  idInput.addEventListener('keydown',event=>{if(event.key==='Enter')track();});
+}());
+</script>
+</body>
+</html>
