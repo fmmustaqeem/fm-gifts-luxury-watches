@@ -59,7 +59,7 @@
       "backup"
     ],
     "deployment": [
-      "cloudflare",
+      "byethost_ftp",
       "domain",
       "build",
       "ci_status"
