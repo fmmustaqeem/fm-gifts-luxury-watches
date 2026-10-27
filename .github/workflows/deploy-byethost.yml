@@ -34,8 +34,9 @@ jobs:
           cp index.html store.html policies.html dist/
           cp assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js dist/assets/
           cp store/cart.html store/checkout.html dist/store/
-          # Never publish demo SKUs or unverified prices.
-          printf '{\n  "schemaVersion": 1,\n  "currency": "PKR",\n  "status": "verified_inventory_required",\n  "products": []\n}\n' > dist/data/catalog.json
+          # Include the previously prepared 80-item demo catalogue (20 in each category).
+          # Names/SKUs remain explicitly marked DEMO; these are display/test items, not verified stock.
+          cp data/catalog.json dist/data/catalog.json
 
           # Validate every expected file and the empty, safe catalogue.
           for file in index.html store.html policies.html assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js store/cart.html store/checkout.html data/catalog.json; do
@@ -47,10 +48,18 @@ jobs:
           python3 -m json.tool dist/data/catalog.json >/dev/null
           python3 - <<'PY'
           import json
+          from collections import Counter
           with open("dist/data/catalog.json", encoding="utf-8") as f:
               data = json.load(f)
-          assert data.get("status") == "verified_inventory_required"
-          assert data.get("products") == [], "Public preview must not contain demo or unverified products"
+          products = data.get("products")
+          assert data.get("status") == "demo_collection_only", "Catalogue must remain explicitly marked as demo"
+          assert isinstance(products, list) and len(products) == 80, "Expected the prepared 80-item catalogue"
+          counts = Counter(p.get("category") for p in products)
+          expected = {"Watches": 20, "Fragrances": 20, "Gifts": 20, "Accessories": 20}
+          assert dict(counts) == expected, f"Unexpected category counts: {dict(counts)}"
+          assert all(str(p.get("sku", "")).startswith("DEMO-") for p in products), "Every preview item must be clearly marked DEMO"
+          assert all(p.get("status") == "Active" for p in products), "Expected all prepared demo items to be visible"
+          print("Validated 80 demo products: 20 each in Watches, Fragrances, Gifts, Accessories.")
           PY
 
           # Paths are intentionally relative in the HTML, so the preview works under /fm-gifts-preview/.
