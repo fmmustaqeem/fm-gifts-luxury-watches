@@ -1,0 +1,55 @@
+name: Package FM Gifts Phase 1 Diagnostic
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: [self-hosted, Linux, ARM64, android, android-api-33]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP for syntax validation
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: none
+
+      - name: Validate PHP syntax and required files
+        run: |
+          set -euo pipefail
+          php -l diagnostics/phase1/check.php
+          test -s diagnostics/phase1/check.php
+          test -s diagnostics/phase1/.htaccess
+          test -s diagnostics/phase1/state/.htaccess
+          test -s diagnostics/phase1/README.md
+          ! grep -R -E '(^|/)token$|TOKEN\|' diagnostics/phase1 --include='*' | grep -v 'README.md'
+
+      - name: Build allowlisted ZIP
+        run: |
+          set -euo pipefail
+          mkdir -p package/preview/.state
+          cp diagnostics/phase1/check.php package/preview/check.php
+          cp diagnostics/phase1/.htaccess package/preview/.htaccess
+          cp diagnostics/phase1/state/.htaccess package/preview/.state/.htaccess
+          cp diagnostics/phase1/README.md package/README.txt
+          cd package
+          zip -qr ../fm-gifts-phase1-diagnostic.zip README.txt preview/check.php preview/.htaccess preview/.state/.htaccess
+          cd ..
+          unzip -Z1 fm-gifts-phase1-diagnostic.zip | sort > zip-members.txt
+          printf '%s\n' 'README.txt' 'preview/.htaccess' 'preview/.state/.htaccess' 'preview/check.php' | sort > expected-members.txt
+          diff -u expected-members.txt zip-members.txt
+          unzip -t fm-gifts-phase1-diagnostic.zip
+          ! unzip -Z1 fm-gifts-phase1-diagnostic.zip | grep -E '(^|/)(token|count)$'
+
+      - name: Upload diagnostic ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fm-gifts-phase1-diagnostic
+          path: fm-gifts-phase1-diagnostic.zip
+          if-no-files-found: error
+          retention-days: 7
