@@ -1,1 +1,91 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FM Gifts & Luxury Watches — Product</title><style>body{font-family:Arial;max-width:1100px;margin:auto;padding:24px}.wrap{display:grid;grid-template-columns:1fr 1fr;gap:28px}.gallery img{width:100%;max-height:480px;object-fit:contain;border:1px solid #ddd;border-radius:12px}.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.thumbs img{width:70px;height:70px;object-fit:contain;border:1px solid #ddd;border-radius:8px}.price{font-size:24px;font-weight:700}.muted{color:#666}.btn{padding:12px 18px;margin:8px 8px 0 0;cursor:pointer}@media(max-width:700px){.wrap{grid-template-columns:1fr}}</style></head><body><p><a href="/shop/catalog.html">← Catalog</a></p><div id="app"></div><script>(function(){const q=new URLSearchParams(location.search),sku=q.get("sku"),products=JSON.parse(localStorage.getItem("fm-products")||"[]"),media=JSON.parse(localStorage.getItem("fm-product-media")||"[]"),p=products.find(x=>x.sku===sku&&x.status==="Active"),root=document.getElementById("app");if(!p){root.innerHTML="<h1>Product not found</h1><p class='muted'>Only approved and published products are available.</p>";return}const imgs=media.filter(x=>x.sku===p.sku&&x.type==="Image"),price=p.price;root.innerHTML="<div class='wrap'><section class='gallery'>"+(imgs[0]?"<img id='hero' src='"+imgs[0].url+"' alt='"+(imgs[0].alt||p.name)+"'>":"<div class='muted'>No product image</div>")+"<div class='thumbs'>"+imgs.map(x=>"<img src='"+x.url+"' alt='"+(x.alt||p.name)+"' onclick='document.getElementById("hero").src=this.src'>").join("")+"</div></section><section><h1>"+p.name+"</h1><p>"+(p.brand||"")+" · "+(p.category||"")+"</p><p class='price'>PKR "+price+"</p><p><b>SKU:</b> "+p.sku+"</p><p>"+(p.description||"Product details are maintained by admin.")+"</p><button class='btn' onclick='alert("Buy Now: "+p.sku+"")'>Buy Now</button><button class='btn' onclick='alert("Added to cart: "+p.sku+"")'>Add to Cart</button></section></div>"})()</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FM Gifts &amp; Luxury Watches — Product Preview</title>
+  <style>
+    body{font-family:Arial,sans-serif;max-width:1100px;margin:auto;padding:24px;color:#211d16}
+    .wrap{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+    .gallery img{width:100%;max-height:480px;object-fit:contain;border:1px solid #ddd;border-radius:12px}
+    .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .thumbs img{width:70px;height:70px;object-fit:contain;border:1px solid #ddd;border-radius:8px;cursor:pointer}
+    .price{font-size:24px;font-weight:700}.muted{color:#666}.btn{padding:12px 18px;margin:8px 8px 0 0;cursor:pointer}
+    .notice{padding:12px;border:1px solid #c8a45d;border-radius:8px;background:#fff9e9}
+    @media(max-width:700px){.wrap{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <p><a href="catalog.html">← Catalog</a></p>
+  <div id="app" aria-live="polite"></div>
+  <script>
+  (function(){
+    'use strict';
+    const root=document.getElementById('app');
+    const params=new URLSearchParams(location.search);
+    const sku=params.get('sku');
+    function readList(key){
+      try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value:[];}
+      catch(error){return [];}
+    }
+    function safeImageUrl(value){
+      if(typeof value!=='string'||!value.trim())return '';
+      try{const url=new URL(value,location.href);return ['https:','http:'].includes(url.protocol)?url.href:'';}
+      catch(error){return '';}
+    }
+    function node(tag,className,text){
+      const el=document.createElement(tag);
+      if(className)el.className=className;
+      if(text!==undefined)el.textContent=String(text);
+      return el;
+    }
+    const products=readList('fm-products');
+    const media=readList('fm-product-media');
+    const product=products.find(item=>item&&item.sku===sku&&item.status==='Active');
+    if(!product){
+      root.append(node('h1','', 'Product not found'));
+      root.append(node('p','muted','Only approved and published products are available.'));
+      return;
+    }
+    const layout=node('div','wrap');
+    const gallery=node('section','gallery');
+    const details=node('section','');
+    const images=media.filter(item=>item&&item.sku===product.sku&&item.type==='Image')
+      .map(item=>({url:safeImageUrl(item.url),alt:String(item.alt||product.name||'Product image')}))
+      .filter(item=>item.url);
+    let hero=null;
+    if(images.length){
+      hero=node('img','','');
+      hero.src=images[0].url;hero.alt=images[0].alt;
+      gallery.append(hero);
+      const thumbs=node('div','thumbs');
+      images.forEach(item=>{
+        const thumb=node('img','','');
+        thumb.src=item.url;thumb.alt=item.alt;
+        thumb.addEventListener('click',()=>{hero.src=item.url;hero.alt=item.alt;});
+        thumbs.append(thumb);
+      });
+      gallery.append(thumbs);
+    }else{
+      gallery.append(node('p','muted','No safe product image is available.'));
+    }
+    details.append(node('h1','',product.name||'Untitled product'));
+    details.append(node('p','',[(product.brand||''),(product.category||'')].filter(Boolean).join(' · ')));
+    details.append(node('p','price','PKR '+(Number.isFinite(Number(product.price))?Number(product.price).toLocaleString('en-PK'):'Price not set')));
+    const skuLine=node('p','');
+    const skuLabel=node('strong','','SKU: ');
+    skuLine.append(skuLabel,document.createTextNode(String(product.sku||'')));
+    details.append(skuLine);
+    details.append(node('p','',product.description||'Product details are maintained by admin.'));
+    details.append(node('p','notice','Preview only. These local demo controls do not place an order or save a cart.'));
+    const buy=node('button','btn','Buy Now');
+    buy.type='button';buy.addEventListener('click',()=>window.alert('Preview only — no order was placed.'));
+    const add=node('button','btn','Add to Cart');
+    add.type='button';add.addEventListener('click',()=>window.alert('Preview only — nothing was added to a real cart.'));
+    details.append(buy,add);
+    layout.append(gallery,details);
+    root.append(layout);
+  }());
+  </script>
+</body>
+</html>
