@@ -38,7 +38,7 @@ jobs:
           # Names/SKUs remain explicitly marked DEMO; these are display/test items, not verified stock.
           cp data/catalog.json dist/data/catalog.json
 
-          # Validate every expected file and the empty, safe catalogue.
+          # Validate every expected file and the explicitly labelled demo catalogue.
           for file in index.html store.html policies.html assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js store/cart.html store/checkout.html data/catalog.json; do
             test -s "$file"
           done
