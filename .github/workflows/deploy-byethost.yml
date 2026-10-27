@@ -33,7 +33,8 @@ jobs:
           mkdir -p dist/assets dist/data dist/store
           cp index.html store.html policies.html dist/
           cp assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js dist/assets/
-          cp data/catalog.json dist/data/
+          # Keep demo SKUs/prices out of any publicly reachable preview.
+          printf '{\n  "schemaVersion": 1,\n  "currency": "PKR",\n  "status": "verified_inventory_required",\n  "products": []\n}\n' > dist/data/catalog.json
           cp store/cart.html store/checkout.html dist/store/
           test -s dist/index.html
           test -s dist/store.html
