@@ -34,15 +34,12 @@ jobs:
           grep -q 'Perfume' index.html
           grep -q 'Kids Watches' index.html
 
-  production-gate:
+  release-policy-gate:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: validate
     runs-on: [self-hosted, android, android-api-33, arm64, soc-spreadtrum-t820-ums9620-2h10-unisoc-t820]
-    environment:
-      name: production
-      url: https://fm-gifts-luxury-watches.pages.dev
     steps:
-      - name: Production release gate
+      - name: Confirm deployment remains a separate approved action
         run: |
-          echo "FM Gifts production gate passed."
-          echo "Cloudflare Pages Git integration performs the production deployment."
+          echo "Validation passed. This workflow does not deploy the site."
+          echo "Deployment target is ByetHost FTP and requires a separately verified, approved process."
