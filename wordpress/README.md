@@ -1,26 +1,35 @@
-# FM Gifts WordPress Theme & Plugin
+# FM Gifts WordPress Theme & Plugins
 
-This directory contains an **isolated WordPress theme and plugin for FM Gifts & Luxury Watches**. It is separate from the FM Commerce repository; no FM Commerce files or deployment settings are changed.
+This directory contains an isolated WordPress theme and two plugins for FM Gifts & Luxury Watches. FM Commerce is separate; its repository, credentials and deployment settings are not changed.
 
 ## Packages
 - Theme: `wp-content/themes/fm-gifts-luxury/`
-- Plugin: `wp-content/plugins/fm-gifts-core/`
+- Store helper plugin: `wp-content/plugins/fm-gifts-core/`
+- AI chat plugin: `wp-content/plugins/fm-gifts-ai/`
 
 ## Package ZIPs
-Run the GitHub Actions workflow **Package FM Gifts WordPress ZIPs** manually from the Actions tab. It validates PHP syntax and uploads two ZIP files as a workflow artifact. This workflow does not deploy to the live website.
+Run **Actions → Package FM Gifts WordPress ZIPs → Run workflow** manually. The workflow PHP-lints the code and uploads three separate ZIPs as a workflow artifact. It does not deploy to the live website.
 
-## Installation checklist
-1. Take a backup of the FM Gifts WordPress site.
-2. Upload/install the theme ZIP through **Appearance → Themes → Add New Theme → Upload Theme**.
-3. Upload/install the plugin ZIP through **Plugins → Add New Plugin → Upload Plugin**.
-4. Install/activate WooCommerce if not already installed.
-5. Configure a shipping zone and add **FM Gifts Delivery**. Check the destination coverage and real courier price before enabling it.
-6. Add verified products, images, stock, SKUs and prices in WooCommerce. The homepage intentionally does not invent real inventory.
-7. Test product page, cart, checkout, mobile navigation, RTL, order emails and delivery charges before launch.
+## AI assistant configuration
+The AI widget is real server-side OpenAI integration, not a canned-response demo. It will not produce answers until the server has a valid API key:
+1. Obtain an OpenAI API key and confirm API billing/usage limits.
+2. Add `define( 'FM_GIFTS_OPENAI_API_KEY', 'YOUR_REAL_API_KEY_HERE' );` to `wp-config.php` above the “stop editing” comment.
+3. Replace the placeholder on the server only. Never paste the key into chat, commit it to GitHub, or put it in browser JavaScript.
+4. Activate FM Gifts AI Assistant and test one message. Default model is `gpt-4o-mini`; API usage may incur charges.
+5. Ensure hosting allows outbound HTTPS requests to `api.openai.com`.
 
-## Important limitations
-- The theme provides a black-and-gold storefront, category links and a New Arrivals section that reads published WooCommerce products.
-- The plugin provides a configurable flat-rate delivery method with a default of PKR 300. This is a starting configuration, not a verified courier quote.
-- WooCommerce Cash on Delivery can be enabled in WooCommerce settings. **Easypaisa and advance online payments are not activated by this code**; use a legitimate supported payment gateway and configure its merchant credentials securely.
-- No AI/API key is exposed in browser code. OpenAI integration is not included in this first package.
-- Review and test on staging first. This branch/PR is not merged and no deployment was triggered.
+## Installation and validation
+1. Back up the FM Gifts WordPress site.
+2. Install the theme ZIP through **Appearance → Themes → Add New Theme → Upload Theme**.
+3. Install both plugin ZIPs through **Plugins → Add New Plugin → Upload Plugin**.
+4. Activate WooCommerce, FM Gifts Core, and FM Gifts AI Assistant as applicable.
+5. Configure the delivery method in a shipping zone. The initial rate is PKR 300; confirm actual courier costs and destination rules before launch.
+6. Configure WooCommerce Cash on Delivery. Easypaisa/advance online payment is not included; add a verified gateway if required.
+7. Add verified products, stock, images and prices. The theme intentionally does not invent actual inventory.
+8. Test mobile layout, RTL, product page, cart, checkout, email delivery, delivery rates and AI before launch.
+
+## Limitations
+- The AI can answer general store questions but is not connected to private order records, payment processing or real inventory data. It must not be represented as an order-tracking agent.
+- AI endpoint has a basic per-IP transient rate limit. Review abuse controls and host capacity before public launch.
+- The plugin expects the OpenAI Responses API and a model available to your API account.
+- The theme/plugin code is committed on the open draft branch/PR only. No production upload, activation, packaging workflow run, or deployment has been performed.
