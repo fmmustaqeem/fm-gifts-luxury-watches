@@ -770,11 +770,12 @@
     },
     {
       "sku": "FM-BELT-COW-LEATHER",
-      "name": "Cow Leather Belt",
+      "name": "Gola Belt",
       "brand": "FM Gifts",
       "category": "Belts",
-      "subcategory": "Cow Leather",
-      "status": "Active"
+      "subcategory": "Gola",
+      "status": "Active",
+      "price": 800
     },
     {
       "sku": "FM-CUFFLINK-001",
