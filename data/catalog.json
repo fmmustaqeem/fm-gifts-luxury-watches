@@ -722,6 +722,72 @@
       "price": 1899,
       "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=900&q=80",
       "status": "Active"
+    },
+    {
+      "sku": "FM-WALLET-COW-LONG",
+      "name": "Cow Leather Long Wallet",
+      "brand": "FM Gifts",
+      "category": "Wallets",
+      "subcategory": "Cow Leather",
+      "price": 1500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLET-COW-MED",
+      "name": "Cow Leather Medium Wallet",
+      "brand": "FM Gifts",
+      "category": "Wallets",
+      "subcategory": "Cow Leather",
+      "price": 1200,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLET-COW-SIZE",
+      "name": "Cow Leather Wallet — Size To Confirm",
+      "brand": "FM Gifts",
+      "category": "Wallets",
+      "subcategory": "Cow Leather",
+      "price": 1000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLET-RESIN-CHINA",
+      "name": "Resin China Wallet",
+      "brand": "FM Gifts",
+      "category": "Wallets",
+      "subcategory": "Resin / China",
+      "price": 800,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-BELT-RESIN",
+      "name": "Resin Belt",
+      "brand": "FM Gifts",
+      "category": "Belts",
+      "subcategory": "Resin",
+      "status": "Active"
+    },
+    {
+      "sku": "FM-BELT-COW-LEATHER",
+      "name": "Cow Leather Belt",
+      "brand": "FM Gifts",
+      "category": "Belts",
+      "subcategory": "Cow Leather",
+      "status": "Active"
+    },
+    {
+      "sku": "FM-CUFFLINK-001",
+      "name": "Cufflinks",
+      "brand": "FM Gifts",
+      "category": "Cufflinks",
+      "status": "Active"
+    },
+    {
+      "sku": "FM-TIE-001",
+      "name": "Tie",
+      "brand": "FM Gifts",
+      "category": "Ties",
+      "status": "Active"
     }
   ]
 }
