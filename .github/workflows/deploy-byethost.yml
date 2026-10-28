@@ -39,6 +39,20 @@ jobs:
           cp index.html store.html policies.html dist/
           cp assets/storefront.css assets/storefront.js assets/ai-assistant.js assets/shop.js assets/cart.js assets/checkout.js dist/assets/
           cp api/ai-chat.php dist/api/
+          # The API key is injected only during deployment; never commit it or print it.
+          test -n "${OPEN_AI_KEY:-}" || { echo "Missing repository secret OPEN_AI_KEY"; exit 1; }
+          python3 - <<'PY'
+          import base64, os
+          encoded = base64.b64encode(os.environ["OPEN_AI_KEY"].encode("utf-8")).decode("ascii")
+          with open("dist/api/config.php", "w", encoding="utf-8") as f:
+              f.write("<?php\\n// Generated during deployment. Keep this file out of version control.\\n")
+              f.write("$fmOpenAiKey = base64_decode('" + encoded + "', true);\\n")
+          PY
+          cat > dist/api/.htaccess <<'HTACCESS'
+          <Files "config.php">
+            Require all denied
+          </Files>
+          HTACCESS
           cp store/cart.html store/checkout.html dist/store/
           # Include the previously prepared 80-item demo catalogue (20 in each category).
           # Names/SKUs remain explicitly marked DEMO; these are display/test items, not verified stock.
@@ -141,7 +155,8 @@ jobs:
           # Only the explicit static allowlist is staged; no repository or WordPress files.
           test ! -e dist/.github
           test ! -e dist/wordpress
-          test "$(find dist -type f | wc -l | tr -d ' ')" = "13"
+          grep -q 'Require all denied' dist/api/.htaccess
+          test "$(find dist -type f | wc -l | tr -d ' ')" = "15"
 
       - name: Validate FTPS credentials and isolated target
         shell: bash
@@ -150,6 +165,7 @@ jobs:
           FTP_USERNAME: ${{ secrets.BYETHOST_FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.BYETHOST_FTP_PASSWORD }}
           FTP_TARGET_DIR: ${{ secrets.BYETHOST_FTP_TARGET_DIR }}
+          OPEN_AI_KEY: ${{ secrets.OPEN_AI_KEY }}
         run: |
           set -euo pipefail
           test -n "$FTP_SERVER"
