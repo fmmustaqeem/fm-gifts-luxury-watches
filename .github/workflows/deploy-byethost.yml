@@ -58,13 +58,33 @@ jobs:
               data = json.load(f)
           products = data.get("products")
           assert data.get("status") == "demo_collection_only", "Catalogue must remain explicitly marked as demo"
-          assert isinstance(products, list) and len(products) == 80, "Expected the prepared 80-item catalogue"
-          counts = Counter(p.get("category") for p in products)
+          assert isinstance(products, list), "Expected a products list"
+          demo = [p for p in products if str(p.get("sku", "")).startswith("DEMO-")]
+          user_listings = [p for p in products if str(p.get("sku", "")).startswith("FM-")]
+          assert len(demo) == 80, f"Expected 80 clearly labelled demo products, got {len(demo)}"
+          counts = Counter(p.get("category") for p in demo)
           expected = {"Watches": 20, "Fragrances": 20, "Gifts": 20, "Accessories": 20}
-          assert dict(counts) == expected, f"Unexpected category counts: {dict(counts)}"
-          assert all(str(p.get("sku", "")).startswith("DEMO-") for p in products), "Every preview item must be clearly marked DEMO"
-          assert all(p.get("status") == "Active" for p in products), "Expected all prepared demo items to be visible"
-          print("Validated 80 demo products: 20 each in Watches, Fragrances, Gifts, Accessories.")
+          assert dict(counts) == expected, f"Unexpected demo category counts: {dict(counts)}"
+          assert all(p.get("status") == "Active" for p in demo), "Expected all prepared demo items to be visible"
+          expected_listings = {
+              "FM-WALLET-COW-LONG": ("Wallets", 1500),
+              "FM-WALLET-COW-MED": ("Wallets", 1200),
+              "FM-WALLET-COW-SIZE": ("Wallets", 1000),
+              "FM-WALLET-RESIN-CHINA": ("Wallets", 800),
+              "FM-BELT-RESIN": ("Belts", None),
+              "FM-BELT-COW-LEATHER": ("Belts", None),
+              "FM-CUFFLINK-001": ("Cufflinks", None),
+              "FM-TIE-001": ("Ties", None),
+          }
+          by_sku = {p.get("sku"): p for p in user_listings}
+          assert set(by_sku) == set(expected_listings), f"Unexpected user listings: {sorted(by_sku)}"
+          for sku, (category, price) in expected_listings.items():
+              item = by_sku[sku]
+              assert item.get("category") == category, f"Wrong category for {sku}"
+              assert item.get("price") == price, f"Wrong price for {sku}"
+              assert item.get("status") == "Active", f"Listing not active: {sku}"
+          assert len(products) == 88, f"Expected 88 total listings (80 demo + 8 requested), got {len(products)}"
+          print("Validated 80 demo items plus 8 requested listings; 4 wallet prices checked. Belt/cufflink/tie prices remain unset.")
           PY
 
           # Paths are intentionally relative in the HTML, so the preview works under /fm-gifts-preview/.
