@@ -47,8 +47,8 @@ jobs:
           import base64, os
           encoded = base64.b64encode(os.environ["OPEN_AI_KEY"].encode("utf-8")).decode("ascii")
           with open("dist/api/config.php", "w", encoding="utf-8") as f:
-              f.write("<?php\\n// Generated during deployment. Keep this file out of version control.\\n")
-              f.write("$fmOpenAiKey = base64_decode('" + encoded + "', true);\\n")
+              f.write("<?php\n// Generated during deployment. Keep this file out of version control.\n")
+              f.write("$fmOpenAiKey = base64_decode('" + encoded + "', true);\n")
           PY
           cat > dist/api/.htaccess <<'HTACCESS'
           <Files "config.php">
