@@ -1,0 +1,95 @@
+{
+  "version": "1.0",
+  "project": "retail",
+  "collections": {
+    "users": [
+      "id",
+      "name",
+      "phone",
+      "email",
+      "role",
+      "tier",
+      "status",
+      "created_at"
+    ],
+    "products": [
+      "id",
+      "sku",
+      "name",
+      "brand",
+      "category",
+      "description",
+      "cost",
+      "price",
+      "status",
+      "source_id",
+      "created_at",
+      "updated_at"
+    ],
+    "media": [
+      "id",
+      "sku",
+      "type",
+      "url",
+      "alt",
+      "created_at"
+    ],
+    "orders": [
+      "id",
+      "customer_id",
+      "items",
+      "subtotal",
+      "delivery_cost",
+      "total",
+      "courier",
+      "tracking",
+      "status",
+      "created_at",
+      "updated_at"
+    ],
+    "order_items": [
+      "order_id",
+      "sku",
+      "name",
+      "qty",
+      "unit_price"
+    ],
+    "couriers": [
+      "id",
+      "name",
+      "website",
+      "whatsapp",
+      "areas",
+      "rates",
+      "status"
+    ],
+    "catalog_sources": [
+      "id",
+      "type",
+      "name",
+      "contact",
+      "url",
+      "sku_mapping",
+      "private"
+    ],
+    "notifications": [
+      "id",
+      "type",
+      "message",
+      "read",
+      "created_at"
+    ]
+  },
+  "rules": {
+    "supplier_data_private": true,
+    "public_catalog_only_active": true,
+    "retail_margin_percent": 40,
+    "b2b_margin_percent": null,
+    "delivery_rate_source": "verified_admin_rate_or_pending_confirmation"
+  },
+  "security": {
+    "passwords": "server-side_hash_only",
+    "secrets": "never_in_browser",
+    "admin_routes": "authenticated"
+  }
+}

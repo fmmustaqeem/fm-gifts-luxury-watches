@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm_deploy:
-        description: "Type DEPLOY to upload the reviewed storefront branch to the isolated preview folder"
+        description: "Type DEPLOY to upload the reviewed static preview to the isolated ByetHost preview folder"
         required: true
         type: string
 
@@ -22,15 +22,59 @@ jobs:
     environment:
       name: byethost-staging
     steps:
-      - name: Checkout reviewed storefront branch
+      - name: Checkout reviewed branch
         uses: actions/checkout@v4
-        with:
-          ref: feat/fresh-luxury-storefront-2026-10-24
-      - name: Set up Node.js for catalog validation
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Validate static files and isolated target
+
+      - name: Stage approved static preview only
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf dist
+          mkdir -p dist/assets dist/data dist/store
+          cp index.html store.html policies.html dist/
+          cp assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js dist/assets/
+          cp store/cart.html store/checkout.html dist/store/
+          # Include the previously prepared 80-item demo catalogue (20 in each category).
+          # Names/SKUs remain explicitly marked DEMO; these are display/test items, not verified stock.
+          cp data/catalog.json dist/data/catalog.json
+
+          # Validate every expected file and the explicitly labelled demo catalogue.
+          for file in index.html store.html policies.html assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js store/cart.html store/checkout.html data/catalog.json; do
+            test -s "$file"
+          done
+          for file in dist/index.html dist/store.html dist/policies.html dist/assets/storefront.css dist/assets/storefront.js dist/assets/shop.js dist/assets/cart.js dist/assets/checkout.js dist/data/catalog.json dist/store/cart.html dist/store/checkout.html; do
+            test -s "$file"
+          done
+          python3 -m json.tool dist/data/catalog.json >/dev/null
+          python3 - <<'PY'
+          import json
+          from collections import Counter
+          with open("dist/data/catalog.json", encoding="utf-8") as f:
+              data = json.load(f)
+          products = data.get("products")
+          assert data.get("status") == "demo_collection_only", "Catalogue must remain explicitly marked as demo"
+          assert isinstance(products, list) and len(products) == 80, "Expected the prepared 80-item catalogue"
+          counts = Counter(p.get("category") for p in products)
+          expected = {"Watches": 20, "Fragrances": 20, "Gifts": 20, "Accessories": 20}
+          assert dict(counts) == expected, f"Unexpected category counts: {dict(counts)}"
+          assert all(str(p.get("sku", "")).startswith("DEMO-") for p in products), "Every preview item must be clearly marked DEMO"
+          assert all(p.get("status") == "Active" for p in products), "Expected all prepared demo items to be visible"
+          print("Validated 80 demo products: 20 each in Watches, Fragrances, Gifts, Accessories.")
+          PY
+
+          # Paths are intentionally relative in the HTML, so the preview works under /fm-gifts-preview/.
+          ! grep -R -E 'href="/|src="/' dist --include='*.html'
+          grep -q 'assets/storefront.js' dist/index.html
+          grep -q 'assets/shop.js' dist/store.html
+          grep -q '../assets/cart.js' dist/store/cart.html
+          grep -q '../assets/checkout.js' dist/store/checkout.html
+
+          # Only the explicit static allowlist is staged; no repository or WordPress files.
+          test ! -e dist/.github
+          test ! -e dist/wordpress
+          test "$(find dist -type f | wc -l | tr -d ' ')" = "11"
+
+      - name: Validate FTPS credentials and isolated target
         shell: bash
         env:
           FTP_SERVER: ${{ secrets.BYETHOST_FTP_SERVER }}
@@ -39,74 +83,13 @@ jobs:
           FTP_TARGET_DIR: ${{ secrets.BYETHOST_FTP_TARGET_DIR }}
         run: |
           set -euo pipefail
-          for file in index.html store.html policies.html assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js data/catalog.json store/cart.html store/checkout.html; do
-            test -s "$file"
-          done
-          node -e "JSON.parse(require('fs').readFileSync('data/catalog.json', 'utf8'))"
           test -n "$FTP_SERVER"
           test -n "$FTP_USERNAME"
           test -n "$FTP_PASSWORD"
-          # Refuse to deploy into the live WordPress document root.
+          # Refuse any upload into the live WordPress document root.
           test "$FTP_TARGET_DIR" = "htdocs/fm-gifts-preview/"
-      - name: Assemble and validate isolated preview payload
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf deploy
-          mkdir -p deploy/assets deploy/data deploy/store
-          cp index.html store.html policies.html deploy/
-          cp assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js deploy/assets/
-          cp data/catalog.json deploy/data/
-          cp store/cart.html store/checkout.html deploy/store/
 
-          # The preview lives in a subfolder, so rewrite root-relative paths
-          # to paths relative to each HTML page. The live WordPress root is untouched.
-          node <<'NODE'
-          const fs = require('node:fs');
-          const path = require('node:path');
-          function replaceFile(file, replacements) {
-            let content = fs.readFileSync(file, 'utf8');
-            for (const [from, to] of replacements) content = content.split(from).join(to);
-            fs.writeFileSync(file, content);
-          }
-          for (const name of ['index.html', 'store.html', 'policies.html']) {
-            replaceFile(path.join('deploy', name), [
-              ['href="/', 'href="./'],
-              ['src="/assets/', 'src="./assets/']
-            ]);
-          }
-          for (const name of ['cart.html', 'checkout.html']) {
-            replaceFile(path.join('deploy/store', name), [
-              ['href="/assets/', 'href="../assets/'],
-              ['src="/assets/', 'src="../assets/'],
-              ['href="/store/cart.html"', 'href="./cart.html"'],
-              ['href="/store/checkout.html"', 'href="./checkout.html"'],
-              ['href="/store.html"', 'href="../store.html"'],
-              ['href="/policies.html"', 'href="../policies.html"'],
-              ['href="/"', 'href="../"']
-            ]);
-          }
-          for (const name of ['storefront.js', 'shop.js']) {
-            replaceFile(path.join('deploy/assets', name), [
-              ['fetch("/data/catalog.json"', 'fetch("data/catalog.json"']
-            ]);
-          }
-          // Do not expose WordPress admin links from the preview policy page.
-          replaceFile('deploy/policies.html', [['href="./admin/"', 'href="./"']]);
-          NODE
-
-          for file in deploy/index.html deploy/store.html deploy/policies.html deploy/assets/storefront.css deploy/assets/storefront.js deploy/assets/shop.js deploy/assets/cart.js deploy/assets/checkout.js deploy/data/catalog.json deploy/store/cart.html deploy/store/checkout.html; do
-            test -s "$file"
-          done
-          node -e "JSON.parse(require('fs').readFileSync('deploy/data/catalog.json', 'utf8'))"
-          if find deploy \( -name '.git*' -o -name '.env*' \) | grep -q .; then
-            echo "Unexpected private metadata in deploy payload"; exit 1
-          fi
-          # Ensure all referenced first-party scripts and styles exist in the staged payload.
-          grep -q 'assets/shop.js' deploy/store.html
-          grep -q 'assets/cart.js' deploy/store/cart.html
-          grep -q 'assets/checkout.js' deploy/store/checkout.html
-      - name: Upload website over FTPS
+      - name: Upload staged static preview over FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.BYETHOST_FTP_SERVER }}
@@ -114,5 +97,5 @@ jobs:
           password: ${{ secrets.BYETHOST_FTP_PASSWORD }}
           protocol: ftps
           port: 21
-          local-dir: ./deploy/
+          local-dir: ./dist/
           server-dir: ${{ secrets.BYETHOST_FTP_TARGET_DIR }}
