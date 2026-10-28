@@ -183,3 +183,7 @@ footer p,footer>small{color:#6e6a60}
   outline-offset:1px;
 }
 .cart-row input{background:#fff;color:#292821;border-color:#d9c7a6}
+
+
+/* FM Gifts price tag: dark bottle green is the label colour, not a product colour. */
+.product-price{display:inline-block;background:#173D2C;color:#fff;padding:6px 10px;border-radius:4px;font-weight:700;letter-spacing:.02em;border:1px solid #2f624a;margin:8px 0 0;}
