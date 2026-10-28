@@ -35,19 +35,20 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf dist
-          mkdir -p dist/assets dist/data dist/store
+          mkdir -p dist/assets dist/data dist/store dist/api
           cp index.html store.html policies.html dist/
-          cp assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js dist/assets/
+          cp assets/storefront.css assets/storefront.js assets/ai-assistant.js assets/shop.js assets/cart.js assets/checkout.js dist/assets/
+          cp api/ai-chat.php dist/api/
           cp store/cart.html store/checkout.html dist/store/
           # Include the previously prepared 80-item demo catalogue (20 in each category).
           # Names/SKUs remain explicitly marked DEMO; these are display/test items, not verified stock.
           cp data/catalog.json dist/data/catalog.json
 
           # Validate every expected file and the explicitly labelled demo catalogue.
-          for file in index.html store.html policies.html assets/storefront.css assets/storefront.js assets/shop.js assets/cart.js assets/checkout.js store/cart.html store/checkout.html data/catalog.json; do
+          for file in index.html store.html policies.html assets/storefront.css assets/storefront.js assets/ai-assistant.js assets/shop.js assets/cart.js assets/checkout.js api/ai-chat.php store/cart.html store/checkout.html data/catalog.json; do
             test -s "$file"
           done
-          for file in dist/index.html dist/store.html dist/policies.html dist/assets/storefront.css dist/assets/storefront.js dist/assets/shop.js dist/assets/cart.js dist/assets/checkout.js dist/data/catalog.json dist/store/cart.html dist/store/checkout.html; do
+          for file in dist/index.html dist/store.html dist/policies.html dist/assets/storefront.css dist/assets/storefront.js dist/assets/ai-assistant.js dist/api/ai-chat.php dist/assets/shop.js dist/assets/cart.js dist/assets/checkout.js dist/data/catalog.json dist/store/cart.html dist/store/checkout.html; do
             test -s "$file"
           done
           python3 -m json.tool dist/data/catalog.json >/dev/null
@@ -114,6 +115,8 @@ jobs:
               "FM-ALARMCLOCK-2200": ("Alarm Clocks", 2200),
               "FM-ALARMCLOCK-2500": ("Alarm Clocks", 2500),
               "FM-ALARMCLOCK-3000": ("Alarm Clocks", 3000),
+              "FM-KEYCHAIN-300": ("Keychains", 300),
+              "FM-KEYCHAIN-600": ("Keychains", 600),
           }
           by_sku = {p.get("sku"): p for p in user_listings}
           assert set(by_sku) == set(expected_listings), f"Unexpected user listings: {sorted(by_sku)}"
@@ -122,13 +125,15 @@ jobs:
               assert item.get("category") == category, f"Wrong category for {sku}"
               assert item.get("price") == price, f"Wrong price for {sku}"
               assert item.get("status") == "Active", f"Listing not active: {sku}"
-          assert len(products) == 127, f"Expected 127 total listings (80 demo + 47 requested), got {len(products)}"
-          print("Validated 80 demo items plus 47 requested listings; category and price checks passed.")
+          assert len(products) == 129, f"Expected 129 total listings (80 demo + 49 requested), got {len(products)}"
+          print("Validated 80 demo items plus 49 requested listings; category and price checks passed.")
           PY
 
           # Paths are intentionally relative in the HTML, so the preview works under /fm-gifts-preview/.
           ! grep -R -E 'href="/|src="/' dist --include='*.html'
           grep -q 'assets/storefront.js' dist/index.html
+          grep -q 'assets/ai-assistant.js' dist/index.html
+          grep -q 'id="fmAiPanel"' dist/index.html
           grep -q 'assets/shop.js' dist/store.html
           grep -q '../assets/cart.js' dist/store/cart.html
           grep -q '../assets/checkout.js' dist/store/checkout.html
@@ -136,7 +141,7 @@ jobs:
           # Only the explicit static allowlist is staged; no repository or WordPress files.
           test ! -e dist/.github
           test ! -e dist/wordpress
-          test "$(find dist -type f | wc -l | tr -d ' ')" = "11"
+          test "$(find dist -type f | wc -l | tr -d ' ')" = "13"
 
       - name: Validate FTPS credentials and isolated target
         shell: bash
