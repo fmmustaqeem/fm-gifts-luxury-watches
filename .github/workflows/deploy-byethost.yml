@@ -32,6 +32,8 @@ jobs:
 
       - name: Stage approved static preview only
         shell: bash
+        env:
+          OPEN_AI_KEY: ${{ secrets.OPEN_AI_KEY }}
         run: |
           set -euo pipefail
           rm -rf dist
