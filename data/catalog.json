@@ -829,7 +829,16 @@
       "brand": "Truworth",
       "category": "Ladies Watch Chains",
       "price": 2500,
-      "status": "Active"
+      "status": "Active",
+      "color_variations": [
+        "Silver",
+        "Golden",
+        "Copper",
+        "Black",
+        "Two Tone — Golden + Silver",
+        "Two Tone — Silver + Black",
+        "Two Tone — Silver + Copper"
+      ]
     },
     {
       "sku": "FM-LADIES-CHAIN-NORMAL-BRAND",
@@ -837,7 +846,16 @@
       "brand": "FM Gifts",
       "category": "Ladies Watch Chains",
       "price": 1800,
-      "status": "Active"
+      "status": "Active",
+      "color_variations": [
+        "Silver",
+        "Golden",
+        "Copper",
+        "Black",
+        "Two Tone — Golden + Silver",
+        "Two Tone — Silver + Black",
+        "Two Tone — Silver + Copper"
+      ]
     },
     {
       "sku": "FM-LADIES-CHAIN-NORMAL",
@@ -845,7 +863,16 @@
       "brand": "FM Gifts",
       "category": "Ladies Watch Chains",
       "price": 1200,
-      "status": "Active"
+      "status": "Active",
+      "color_variations": [
+        "Silver",
+        "Golden",
+        "Copper",
+        "Black",
+        "Two Tone — Golden + Silver",
+        "Two Tone — Silver + Black",
+        "Two Tone — Silver + Copper"
+      ]
     },
     {
       "sku": "FM-LADIES-CHAIN-SMALL",
@@ -853,7 +880,16 @@
       "brand": "FM Gifts",
       "category": "Ladies Watch Chains",
       "price": 800,
-      "status": "Active"
+      "status": "Active",
+      "color_variations": [
+        "Silver",
+        "Golden",
+        "Copper",
+        "Black",
+        "Two Tone — Golden + Silver",
+        "Two Tone — Silver + Black",
+        "Two Tone — Silver + Copper"
+      ]
     },
     {
       "sku": "FM-GENTS-CHAIN-LOW",
@@ -861,7 +897,16 @@
       "brand": "FM Gifts",
       "category": "Gents Watch Chains",
       "price": 1200,
-      "status": "Active"
+      "status": "Active",
+      "color_variations": [
+        "Silver",
+        "Golden",
+        "Copper",
+        "Black",
+        "Two Tone — Golden + Silver",
+        "Two Tone — Silver + Black",
+        "Two Tone — Silver + Copper"
+      ]
     },
     {
       "sku": "FM-GENTS-CHAIN-HIGH",
@@ -869,7 +914,16 @@
       "brand": "FM Gifts",
       "category": "Gents Watch Chains",
       "price": 2000,
-      "status": "Active"
+      "status": "Active",
+      "color_variations": [
+        "Silver",
+        "Golden",
+        "Copper",
+        "Black",
+        "Two Tone — Golden + Silver",
+        "Two Tone — Silver + Black",
+        "Two Tone — Silver + Copper"
+      ]
     },
     {
       "sku": "FM-GENTS-WATCH-COPY",
