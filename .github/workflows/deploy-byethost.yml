@@ -124,7 +124,6 @@ jobs:
               assert item.get("status") == "Active", f"Listing not active: {sku}"
           assert len(products) == 127, f"Expected 127 total listings (80 demo + 47 requested), got {len(products)}"
           print("Validated 80 demo items plus 47 requested listings; category and price checks passed.")
-          print("Validated 80 demo items plus 8 requested listings; 4 wallet prices checked. Belt/cufflink/tie prices remain unset.")
           PY
 
           # Paths are intentionally relative in the HTML, so the preview works under /fm-gifts-preview/.
