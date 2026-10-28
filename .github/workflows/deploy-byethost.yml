@@ -75,6 +75,45 @@ jobs:
               "FM-BELT-COW-LEATHER": ("Belts", None),
               "FM-CUFFLINK-001": ("Cufflinks", None),
               "FM-TIE-001": ("Ties", None),
+              "FM-CUFFLINK-500": ("Cufflinks", 500),
+              "FM-CUFFLINK-800": ("Cufflinks", 800),
+              "FM-CUFFLINK-1000": ("Cufflinks", 1000),
+              "FM-LADIES-CHAIN-TRUWORTH": ("Ladies Watch Chains", 2500),
+              "FM-LADIES-CHAIN-NORMAL-BRAND": ("Ladies Watch Chains", 1800),
+              "FM-LADIES-CHAIN-NORMAL": ("Ladies Watch Chains", 1200),
+              "FM-LADIES-CHAIN-SMALL": ("Ladies Watch Chains", 800),
+              "FM-GENTS-CHAIN-LOW": ("Gents Watch Chains", 1200),
+              "FM-GENTS-CHAIN-HIGH": ("Gents Watch Chains", 2000),
+              "FM-GENTS-WATCH-COPY": ("Watches", 4000),
+              "FM-GENTS-WATCH-ORIGINAL-5000": ("Watches", 5000),
+              "FM-GENTS-WATCH-ORIGINAL-6000": ("Watches", 6000),
+              "FM-GENTS-WATCH-ORIGINAL-7000": ("Watches", 7000),
+              "FM-GENTS-WATCH-DOUBLE-TIME": ("Watches", 7000),
+              "FM-GENTS-WATCH-CHRONOGRAPH": ("Watches", 7000),
+              "FM-GENTS-WATCH-SEMI-AUTO": ("Watches", 6500),
+              "FM-GENTS-WATCH-FULL-AUTO": ("Watches", 8000),
+              "FM-BELT-RESIN-500": ("Belts", 500),
+              "FM-BELT-2-IN-1": ("Belts", 1000),
+              "FM-BELT-LEATHER-15": ("Belts", 1200),
+              "FM-BELT-LEATHER-175": ("Belts", 1500),
+              "FM-WALLCLOCK-REDUM-2500": ("Wall Clocks", 2500),
+              "FM-WALLCLOCK-REDUM-3000": ("Wall Clocks", 3000),
+              "FM-WALLCLOCK-DIGITAL": ("Wall Clocks", 3000),
+              "FM-WALLCLOCK-DIGITAL-ANALOG": ("Wall Clocks", 3500),
+              "FM-WALLCLOCK-BOSS": ("Wall Clocks", 2000),
+              "FM-WALLCLOCK-BWC": ("Wall Clocks", 1800),
+              "FM-WALLCLOCK-UNIC": ("Wall Clocks", 2200),
+              "FM-WALLCLOCK-SETTO-3500": ("Wall Clocks", 3500),
+              "FM-WALLCLOCK-SMALL-800": ("Wall Clocks", 800),
+              "FM-WALLCLOCK-MED-1200": ("Wall Clocks", 1200),
+              "FM-WALLCLOCK-MED-1500": ("Wall Clocks", 1500),
+              "FM-WALLCLOCK-SETTO-4500": ("Wall Clocks", 4500),
+              "FM-WALLCLOCK-SETTO-5500": ("Wall Clocks", 5500),
+              "FM-ALARMCLOCK-1000": ("Alarm Clocks", 1000),
+              "FM-ALARMCLOCK-1800": ("Alarm Clocks", 1800),
+              "FM-ALARMCLOCK-2200": ("Alarm Clocks", 2200),
+              "FM-ALARMCLOCK-2500": ("Alarm Clocks", 2500),
+              "FM-ALARMCLOCK-3000": ("Alarm Clocks", 3000),
           }
           by_sku = {p.get("sku"): p for p in user_listings}
           assert set(by_sku) == set(expected_listings), f"Unexpected user listings: {sorted(by_sku)}"
@@ -83,7 +122,8 @@ jobs:
               assert item.get("category") == category, f"Wrong category for {sku}"
               assert item.get("price") == price, f"Wrong price for {sku}"
               assert item.get("status") == "Active", f"Listing not active: {sku}"
-          assert len(products) == 88, f"Expected 88 total listings (80 demo + 8 requested), got {len(products)}"
+          assert len(products) == 127, f"Expected 127 total listings (80 demo + 47 requested), got {len(products)}"
+          print("Validated 80 demo items plus 47 requested listings; category and price checks passed.")
           print("Validated 80 demo items plus 8 requested listings; 4 wallet prices checked. Belt/cufflink/tie prices remain unset.")
           PY
 
