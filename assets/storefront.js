@@ -27,6 +27,13 @@ function makeProductCard(product){
   const name=document.createElement("h3");name.textContent=product.name||"Product";
   const price=document.createElement("p");price.className="product-price";price.textContent=Number.isFinite(Number(product.price))?"PKR "+Number(product.price).toLocaleString("en-PK"):"Price to be confirmed";
   details.append(categoryText,name,price);
+  if(Array.isArray(product.color_variations)&&product.color_variations.length){
+    const colorWrap=document.createElement("label");colorWrap.className="product-color-wrap";
+    const colorLabel=document.createElement("span");colorLabel.className="product-color-label";colorLabel.textContent="Available colour";
+    const colorSelect=document.createElement("select");colorSelect.className="product-color-select";colorSelect.setAttribute("aria-label","Choose colour for "+(product.name||"product"));
+    product.color_variations.forEach(color=>{const option=document.createElement("option");option.value=color;option.textContent=color;colorSelect.append(option);});
+    colorWrap.append(colorLabel,colorSelect);details.append(colorWrap);
+  }
   if(product.sku&&product.sku.startsWith("DEMO-")){const demo=document.createElement("span");demo.className="demo-label";demo.textContent="DEMO ITEM";details.append(demo);}
   card.append(visual,details);return card;
 }
