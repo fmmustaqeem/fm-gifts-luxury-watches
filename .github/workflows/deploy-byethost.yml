@@ -30,6 +30,13 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Set up PHP 8.3 for syntax validation
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: none
+          coverage: none
+
       - name: Stage approved static preview only
         shell: bash
         env:
