@@ -1126,6 +1126,15 @@
       "category": "Keychains",
       "price": 600,
       "status": "Active"
+    },
+    {
+      "sku": "FM-CHAIN-DARK-BOTTLE-GREEN",
+      "name": "Watch Chain — Dark Bottle Green",
+      "brand": "FM Gifts",
+      "category": "Watch Chains",
+      "price": 800,
+      "color": "Dark Bottle Green",
+      "status": "Active"
     }
   ]
 }
