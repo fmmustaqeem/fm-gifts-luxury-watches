@@ -765,7 +765,8 @@
       "brand": "FM Gifts",
       "category": "Belts",
       "subcategory": "Resin",
-      "status": "Active"
+      "status": "Active",
+      "price": 500
     },
     {
       "sku": "FM-BELT-COW-LEATHER",
@@ -780,14 +781,16 @@
       "name": "Cufflinks",
       "brand": "FM Gifts",
       "category": "Cufflinks",
-      "status": "Active"
+      "status": "Active",
+      "price": 500
     },
     {
       "sku": "FM-TIE-001",
       "name": "Tie",
       "brand": "FM Gifts",
       "category": "Ties",
-      "status": "Active"
+      "status": "Active",
+      "price": 300
     },
     {
       "sku": "FM-CUFFLINK-500",
@@ -1099,6 +1102,22 @@
       "brand": "FM Gifts",
       "category": "Alarm Clocks",
       "price": 3000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-KEYCHAIN-300",
+      "name": "Keychain — Basic",
+      "brand": "FM Gifts",
+      "category": "Keychains",
+      "price": 300,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-KEYCHAIN-600",
+      "name": "Keychain — Premium",
+      "brand": "FM Gifts",
+      "category": "Keychains",
+      "price": 600,
       "status": "Active"
     }
   ]
