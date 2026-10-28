@@ -775,7 +775,13 @@
       "category": "Belts",
       "subcategory": "Gola",
       "status": "Active",
-      "price": 800
+      "price": 800,
+      "color_variations": [
+        "Black",
+        "Brown",
+        "Chamois",
+        "Champion Color (Maroon-type Brown)"
+      ]
     },
     {
       "sku": "FM-CUFFLINK-001",
