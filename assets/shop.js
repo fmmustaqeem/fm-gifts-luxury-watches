@@ -20,8 +20,11 @@
       const name=document.createElement("h3");name.textContent=p.name;
       const price=document.createElement("p");price.className="product-price";price.textContent=Number.isFinite(Number(p.price))?money(p.price):"Price to be confirmed";
       const add=document.createElement("button");add.className="button gold add-button";add.textContent="Add to cart";add.disabled=!p.sku||!Number.isFinite(Number(p.price))||Number(p.price)<0;
-      add.addEventListener("click",()=>{const cart=readCart(),old=cart.find(x=>x.sku===p.sku);if(old)old.qty=Math.min(99,(Number(old.qty)||1)+1);else cart.push({sku:p.sku,name:p.name,price:Number(p.price),qty:1});localStorage.setItem("fm-cart",JSON.stringify(cart));updateCount();add.textContent="Added ✓";setTimeout(()=>add.textContent="Add to cart",1000);});
-      details.append(category,demo,name,price,add);card.append(visual,details);root.append(card);
+      const addToCart=()=>{const cart=readCart(),old=cart.find(x=>x.sku===p.sku);if(old)old.qty=Math.min(99,(Number(old.qty)||1)+1);else cart.push({sku:p.sku,name:p.name,price:Number(p.price),qty:1});localStorage.setItem("fm-cart",JSON.stringify(cart));updateCount();return cart;};
+      add.addEventListener("click",()=>{addToCart();add.textContent="Added ✓";setTimeout(()=>add.textContent="Add to cart",1000);});
+      const buy=document.createElement("button");buy.className="button outline buy-now-button";buy.textContent="Buy now";buy.disabled=add.disabled;buy.addEventListener("click",()=>{addToCart();window.location.href="store/checkout.html";});
+      const actions=document.createElement("div");actions.className="product-actions";actions.append(add,buy);
+      details.append(category,demo,name,price,actions);card.append(visual,details);root.append(card);
     }
   }
   $("searchInput").addEventListener("input",render);$("categoryFilter").addEventListener("change",render);
