@@ -28,6 +28,13 @@ if (!function_exists('curl_init')) {
     respond(503, ['error' => 'The AI service is not available on this server yet.']);
 }
 $apiKey = getenv('FM_OPENAI_API_KEY') ?: getenv('OPENAI_API_KEY');
+if (!$apiKey && is_file(__DIR__ . '/config.php')) {
+    // Deployment-generated config is protected by api/.htaccess.
+    require __DIR__ . '/config.php';
+    if (isset($fmOpenAiKey) && is_string($fmOpenAiKey)) {
+        $apiKey = $fmOpenAiKey;
+    }
+}
 if (!$apiKey) {
     respond(503, ['error' => 'AI assistant setup is pending. Please contact us on WhatsApp for help.']);
 }
