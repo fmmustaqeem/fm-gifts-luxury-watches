@@ -16,7 +16,7 @@
       if(p.image){const img=document.createElement("img");img.src=p.image;img.alt=p.name;img.loading="lazy";visual.append(img);}else visual.textContent="FM";
       const details=document.createElement("div");details.className="product-details";
       const category=document.createElement("span");category.className="product-category";category.textContent=p.category||"Collection";
-      const demo=document.createElement("span");demo.className="demo-label";demo.textContent="DEMO ITEM — NOT VERIFIED STOCK";
+      const inventoryLabel=document.createElement("span");inventoryLabel.className="demo-label";inventoryLabel.textContent=String(p.sku||"").startsWith("DEMO-")?"DEMO ITEM — NOT VERIFIED STOCK":"LISTING — STOCK TO CONFIRM";
       const name=document.createElement("h3");name.textContent=p.name;
       const price=document.createElement("p");price.className="product-price";price.textContent=Number.isFinite(Number(p.price))?money(p.price):"Price to be confirmed";
       const add=document.createElement("button");add.className="button gold add-button";add.textContent="Add to cart";add.disabled=!p.sku||!Number.isFinite(Number(p.price))||Number(p.price)<0;
@@ -24,7 +24,7 @@
       add.addEventListener("click",()=>{addToCart();add.textContent="Added ✓";setTimeout(()=>add.textContent="Add to cart",1000);});
       const buy=document.createElement("button");buy.className="button outline buy-now-button";buy.textContent="Buy now";buy.disabled=add.disabled;buy.addEventListener("click",()=>{addToCart();window.location.href="store/checkout.html";});
       const actions=document.createElement("div");actions.className="product-actions";actions.append(add,buy);
-      details.append(category,demo,name,price,actions);card.append(visual,details);root.append(card);
+      details.append(category,inventoryLabel,name,price,actions);card.append(visual,details);root.append(card);
     }
   }
   $("searchInput").addEventListener("input",render);$("categoryFilter").addEventListener("change",render);
