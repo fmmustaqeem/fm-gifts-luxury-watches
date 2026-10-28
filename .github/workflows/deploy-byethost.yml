@@ -167,7 +167,6 @@ jobs:
           FTP_USERNAME: ${{ secrets.BYETHOST_FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.BYETHOST_FTP_PASSWORD }}
           FTP_TARGET_DIR: ${{ secrets.BYETHOST_FTP_TARGET_DIR }}
-          OPEN_AI_KEY: ${{ secrets.OPEN_AI_KEY }}
         run: |
           set -euo pipefail
           test -n "$FTP_SERVER"
