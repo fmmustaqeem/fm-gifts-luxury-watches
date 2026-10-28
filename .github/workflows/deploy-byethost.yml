@@ -158,6 +158,12 @@ jobs:
           test ! -e dist/.github
           test ! -e dist/wordpress
           grep -q 'Require all denied' dist/api/.htaccess
+          # Fail closed if PHP is unavailable or either endpoint/config has syntax errors.
+          command -v php >/dev/null
+          php -l dist/api/ai-chat.php
+          php -l dist/api/config.php
+          # Never print generated config content or the secret to logs.
+          ! grep -q 'OPEN_AI_KEY' dist/api/config.php
           test "$(find dist -type f | wc -l | tr -d ' ')" = "15"
 
       - name: Validate FTPS credentials and isolated target
