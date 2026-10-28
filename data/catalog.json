@@ -788,6 +788,318 @@
       "brand": "FM Gifts",
       "category": "Ties",
       "status": "Active"
+    },
+    {
+      "sku": "FM-CUFFLINK-500",
+      "name": "Cufflinks — Basic",
+      "brand": "FM Gifts",
+      "category": "Cufflinks",
+      "price": 500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-CUFFLINK-800",
+      "name": "Cufflinks — Standard",
+      "brand": "FM Gifts",
+      "category": "Cufflinks",
+      "price": 800,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-CUFFLINK-1000",
+      "name": "Cufflinks — Premium",
+      "brand": "FM Gifts",
+      "category": "Cufflinks",
+      "price": 1000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-LADIES-CHAIN-TRUWORTH",
+      "name": "Ladies Watch Chain — Imported Truworth Brand",
+      "brand": "Truworth",
+      "category": "Ladies Watch Chains",
+      "price": 2500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-LADIES-CHAIN-NORMAL-BRAND",
+      "name": "Ladies Watch Chain — Normal Brand",
+      "brand": "FM Gifts",
+      "category": "Ladies Watch Chains",
+      "price": 1800,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-LADIES-CHAIN-NORMAL",
+      "name": "Ladies Watch Chain — Normal",
+      "brand": "FM Gifts",
+      "category": "Ladies Watch Chains",
+      "price": 1200,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-LADIES-CHAIN-SMALL",
+      "name": "Ladies Watch Chain — Small",
+      "brand": "FM Gifts",
+      "category": "Ladies Watch Chains",
+      "price": 800,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-CHAIN-LOW",
+      "name": "Gents Watch Chain — Low",
+      "brand": "FM Gifts",
+      "category": "Gents Watch Chains",
+      "price": 1200,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-CHAIN-HIGH",
+      "name": "Gents Watch Chain — High",
+      "brand": "FM Gifts",
+      "category": "Gents Watch Chains",
+      "price": 2000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-WATCH-COPY",
+      "name": "Gents Watch — Copy Brand",
+      "brand": "FM Gifts",
+      "category": "Watches",
+      "price": 4000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-WATCH-ORIGINAL-5000",
+      "name": "Gents Watch — Original Brand (Option 1)",
+      "brand": "FM Gifts",
+      "category": "Watches",
+      "price": 5000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-WATCH-ORIGINAL-6000",
+      "name": "Gents Watch — Original Brand (Option 2)",
+      "brand": "FM Gifts",
+      "category": "Watches",
+      "price": 6000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-WATCH-ORIGINAL-7000",
+      "name": "Gents Watch — Original Brand (Option 3)",
+      "brand": "FM Gifts",
+      "category": "Watches",
+      "price": 7000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-WATCH-DOUBLE-TIME",
+      "name": "Gents Watch — Double Time",
+      "brand": "FM Gifts",
+      "category": "Watches",
+      "price": 7000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-WATCH-CHRONOGRAPH",
+      "name": "Gents Watch — Chronograph",
+      "brand": "FM Gifts",
+      "category": "Watches",
+      "price": 7000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-WATCH-SEMI-AUTO",
+      "name": "Gents Watch — Semi Automatic",
+      "brand": "FM Gifts",
+      "category": "Watches",
+      "price": 6500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-GENTS-WATCH-FULL-AUTO",
+      "name": "Gents Watch — Full Automatic",
+      "brand": "FM Gifts",
+      "category": "Watches",
+      "price": 8000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-BELT-RESIN-500",
+      "name": "Resin Belt",
+      "brand": "FM Gifts",
+      "category": "Belts",
+      "price": 500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-BELT-2-IN-1",
+      "name": "2-in-1 Belt",
+      "brand": "FM Gifts",
+      "category": "Belts",
+      "price": 1000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-BELT-LEATHER-15",
+      "name": "Leather Belt — 1.5 inch",
+      "brand": "FM Gifts",
+      "category": "Belts",
+      "price": 1200,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-BELT-LEATHER-175",
+      "name": "Leather Belt — 1.75 inch",
+      "brand": "FM Gifts",
+      "category": "Belts",
+      "price": 1500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-REDUM-2500",
+      "name": "Redum Glow-in-the-Dark Wall Clock — Option 1",
+      "brand": "Redum",
+      "category": "Wall Clocks",
+      "price": 2500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-REDUM-3000",
+      "name": "Redum Glow-in-the-Dark Wall Clock — Option 2",
+      "brand": "Redum",
+      "category": "Wall Clocks",
+      "price": 3000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-DIGITAL",
+      "name": "Digital Wall Clock",
+      "brand": "FM Gifts",
+      "category": "Wall Clocks",
+      "price": 3000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-DIGITAL-ANALOG",
+      "name": "Digital + Analog Wall Clock",
+      "brand": "FM Gifts",
+      "category": "Wall Clocks",
+      "price": 3500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-BOSS",
+      "name": "Boss Wall Clock",
+      "brand": "FM Gifts",
+      "category": "Wall Clocks",
+      "price": 2000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-BWC",
+      "name": "BWC Wall Clock",
+      "brand": "FM Gifts",
+      "category": "Wall Clocks",
+      "price": 1800,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-UNIC",
+      "name": "Unic Wall Clock",
+      "brand": "FM Gifts",
+      "category": "Wall Clocks",
+      "price": 2200,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-SETTO-3500",
+      "name": "Setto Wall Clock",
+      "brand": "Setto",
+      "category": "Wall Clocks",
+      "price": 3500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-SMALL-800",
+      "name": "Small Wall Clock — Option 1",
+      "brand": "FM Gifts",
+      "category": "Wall Clocks",
+      "price": 800,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-MED-1200",
+      "name": "Medium Wall Clock — Option 1",
+      "brand": "FM Gifts",
+      "category": "Wall Clocks",
+      "price": 1200,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-MED-1500",
+      "name": "Medium Wall Clock — Option 2",
+      "brand": "FM Gifts",
+      "category": "Wall Clocks",
+      "price": 1500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-SETTO-4500",
+      "name": "Setto Imported Wall Clock — Option 1",
+      "brand": "Setto",
+      "category": "Wall Clocks",
+      "price": 4500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-WALLCLOCK-SETTO-5500",
+      "name": "Setto Imported Wall Clock — Option 2",
+      "brand": "Setto",
+      "category": "Wall Clocks",
+      "price": 5500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-ALARMCLOCK-1000",
+      "name": "Alarm Clock — Option 1",
+      "brand": "FM Gifts",
+      "category": "Alarm Clocks",
+      "price": 1000,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-ALARMCLOCK-1800",
+      "name": "Alarm Clock — Option 2",
+      "brand": "FM Gifts",
+      "category": "Alarm Clocks",
+      "price": 1800,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-ALARMCLOCK-2200",
+      "name": "Alarm Clock — Option 3",
+      "brand": "FM Gifts",
+      "category": "Alarm Clocks",
+      "price": 2200,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-ALARMCLOCK-2500",
+      "name": "Alarm Clock — Option 4",
+      "brand": "FM Gifts",
+      "category": "Alarm Clocks",
+      "price": 2500,
+      "status": "Active"
+    },
+    {
+      "sku": "FM-ALARMCLOCK-3000",
+      "name": "Alarm Clock — Option 5",
+      "brand": "FM Gifts",
+      "category": "Alarm Clocks",
+      "price": 3000,
+      "status": "Active"
     }
   ]
 }
