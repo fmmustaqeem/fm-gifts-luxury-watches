@@ -62,8 +62,10 @@ jobs:
           fi
           if [ "$(id -u)" -eq 0 ]; then
             APT=(apt-get)
+            DPKG=(dpkg)
           elif command -v sudo >/dev/null 2>&1; then
             APT=(sudo apt-get)
+            DPKG=(sudo dpkg)
           else
             echo "::error::Runner is not root and sudo is unavailable; PHP installation is blocked."
             id
@@ -75,7 +77,7 @@ jobs:
             echo "::error::dpkg command is unavailable; cannot repair package state."
             exit 1
           fi
-          dpkg --configure -a
+          "${DPKG[@]}" --configure -a
           "${APT[@]}" update
           "${APT[@]}" install -y --no-install-recommends php-cli
           php -v
