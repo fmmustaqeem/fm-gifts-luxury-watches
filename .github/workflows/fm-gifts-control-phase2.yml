@@ -70,6 +70,8 @@ jobs:
             exit 1
           fi
           export DEBIAN_FRONTEND=noninteractive
+          echo "Repairing any previously interrupted dpkg configuration..."
+          "${APT[@]}" -o Dpkg::Use-Pty=0 --configure -a
           "${APT[@]}" update
           "${APT[@]}" install -y --no-install-recommends php-cli
           php -v
