@@ -82,7 +82,7 @@ final class Plugin {
         <?php
     }
 
-    private static function permission(\WP_REST_Request $request): bool {
+    public static function permission(\WP_REST_Request $request): bool {
         return is_user_logged_in()
             && current_user_can(self::CAP_MANAGE)
             && wp_verify_nonce((string) $request->get_header('X-WP-Nonce'), 'wp_rest') === 1;

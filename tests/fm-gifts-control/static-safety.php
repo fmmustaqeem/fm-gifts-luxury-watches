@@ -13,7 +13,7 @@ $remove = is_file($uninstall) ? (string) file_get_contents($uninstall) : '';
 $assert($source !== '', 'Plugin bootstrap exists');
 $assert(str_contains($source, 'READ-ONLY PROTOTYPE') && str_contains($source, 'LOCAL / STAGING'), 'Persistent safety labels are present');
 $assert(str_contains($source, 'wc_get_products') && str_contains($source, 'wc_get_orders'), 'WooCommerce CRUD read APIs are used');
-$assert(str_contains($source, "'methods' => $get") && str_contains($source, '$get = \WP_REST_Server::READABLE'), 'REST routes are GET-only');
+$assert(str_contains($source, "'methods' => \$get") && str_contains($source, '$get = \WP_REST_Server::READABLE'), 'REST routes are GET-only');
 $assert(str_contains($source, 'wp_verify_nonce') && str_contains($source, 'current_user_can'), 'REST routes require nonce and capability');
 $assert(str_contains($source, "'order_id'") && str_contains($source, "'line_items'") && !str_contains($source, "'billing_email'"), 'Order serializer uses an explicit allowlist');
 $assert(str_contains($source, 'NOT VERIFIED') && str_contains($source, 'NOT TESTED'), 'Hosting and outbound status are not fabricated');
