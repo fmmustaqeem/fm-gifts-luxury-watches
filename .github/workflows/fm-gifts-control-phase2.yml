@@ -48,18 +48,35 @@ jobs:
           echo "This workflow performs repository-local checks only."
           echo "No FTP, deployment, live-site requests, or external provider calls."
 
-      - name: Check PHP availability
+      - name: Locate PHP CLI (Termux host or DroidRunner)
         id: php
         shell: bash
         run: |
           set -euo pipefail
-          if ! command -v php >/dev/null 2>&1; then
-            echo "::error::PHP CLI is not installed or not on PATH in the DroidRunner environment."
-            echo "PHP CLI: NOT AVAILABLE" >> "$GITHUB_STEP_SUMMARY"
+          PHP_BIN=""
+          for candidate in \
+            "$(command -v php 2>/dev/null || true)" \
+            "${PREFIX:-}/bin/php" \
+            "/data/data/com.termux/files/usr/bin/php" \
+            "/usr/bin/php" \
+            "/usr/local/bin/php" \
+            "/bin/php"; do
+            if [ -n "$candidate" ] && [ -x "$candidate" ] && [ ! -d "$candidate" ]; then
+              PHP_BIN="$candidate"
+              break
+            fi
+          done
+          if [ -z "$PHP_BIN" ]; then
+            echo "::error::PHP CLI is not visible inside the DroidRunner job. Termux PHP may not be mounted into this PRoot."
+            echo "PHP CLI: BLOCKED — no executable found in PATH or common Termux/Linux locations." >> "$GITHUB_STEP_SUMMARY"
+            echo "PATH=$PATH"
+            echo "PREFIX=${PREFIX:-unset}"
+            ls -ld /data/data/com.termux/files/usr/bin/php /usr/bin/php /usr/local/bin/php 2>&1 || true
             exit 1
           fi
-          php -v
-          php -r 'printf("PHP_VERSION=%s\\n", PHP_VERSION);'
+          echo "php_bin=$PHP_BIN" >> "$GITHUB_OUTPUT"
+          "$PHP_BIN" -v
+          "$PHP_BIN" -r 'printf("PHP_VERSION=%s\\n", PHP_VERSION);'
 
       - name: Lint plugin PHP files
         shell: bash
@@ -77,7 +94,7 @@ jobs:
             exit 1
           fi
           for file in "${files[@]}"; do
-            php -l "$file"
+            "${{ steps.php.outputs.php_bin }}" -l "$file"
           done
 
       - name: Verify required safety markers
