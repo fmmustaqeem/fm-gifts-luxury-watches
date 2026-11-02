@@ -48,40 +48,27 @@ jobs:
           echo "This workflow performs repository-local checks only."
           echo "No FTP, deployment, live-site requests, or external provider calls."
 
-      - name: Install PHP CLI inside DroidRunner PRoot when missing
+      - name: Diagnose PRoot package-manager permissions (read-only)
         shell: bash
         run: |
-          set -euo pipefail
-          if command -v php >/dev/null 2>&1; then
-            echo "PHP CLI already available: $(command -v php)"
-            exit 0
-          fi
-          if ! command -v apt-get >/dev/null 2>&1; then
-            echo "::error::apt-get is unavailable; cannot install PHP in this runner environment."
-            exit 1
-          fi
-          if [ "$(id -u)" -eq 0 ]; then
-            APT=(apt-get)
-            DPKG=(dpkg)
-          elif command -v sudo >/dev/null 2>&1; then
-            APT=(sudo apt-get)
-            DPKG=(sudo dpkg)
+          set -u
+          echo "Identity:"
+          id
+          echo "UID mapping:"
+          cat /proc/self/uid_map 2>&1 || true
+          echo "dpkg directory permissions:"
+          ls -ld /var/lib/dpkg /var/lib/dpkg/status /var/lib/dpkg/updates 2>&1 || true
+          echo "Filesystem mount:"
+          grep -E ' /var | /var/lib| / ' /proc/mounts 2>&1 || true
+          echo "Write permission test (no file is created):"
+          if [ -w /var/lib/dpkg ] && [ -w /var/lib/dpkg/status ]; then
+            echo "dpkg paths report writable to this process."
           else
-            echo "::error::Runner is not root and sudo is unavailable; PHP installation is blocked."
-            id
-            exit 1
+            echo "::warning::dpkg paths are not writable to this PRoot process."
           fi
-          export DEBIAN_FRONTEND=noninteractive
-          echo "Repairing any previously interrupted dpkg configuration..."
-          if ! command -v dpkg >/dev/null 2>&1; then
-            echo "::error::dpkg command is unavailable; cannot repair package state."
-            exit 1
-          fi
-          "${DPKG[@]}" --configure -a
-          "${APT[@]}" update
-          "${APT[@]}" install -y --no-install-recommends php-cli
-          php -v
-          php -r 'printf("PHP_VERSION=%s\\n", PHP_VERSION);'
+          echo "PHP availability:"
+          command -v php || true
+          echo "No package manager command was run; this diagnostic is read-only."
 
       - name: Locate PHP CLI (Termux host or DroidRunner)
         id: php
