@@ -71,7 +71,11 @@ jobs:
           fi
           export DEBIAN_FRONTEND=noninteractive
           echo "Repairing any previously interrupted dpkg configuration..."
-          "${APT[@]}" -o Dpkg::Use-Pty=0 --configure -a
+          if ! command -v dpkg >/dev/null 2>&1; then
+            echo "::error::dpkg command is unavailable; cannot repair package state."
+            exit 1
+          fi
+          dpkg --configure -a
           "${APT[@]}" update
           "${APT[@]}" install -y --no-install-recommends php-cli
           php -v
