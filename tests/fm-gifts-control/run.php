@@ -150,52 +150,54 @@ assert_true($GLOBALS['fmgc_option_writes'] === ['fm_gifts_control_version'] && g
 assert_true(get_option('unrelated_option') === 'keep-me', 'activation preserves unrelated options');
 
 // 2. Admin menu and asset bootstrapping remain capability-gated.
-\\FMGifts\\Control\\Plugin::menu();
+\FMGifts\Control\Plugin::menu();
 assert_true(($GLOBALS['fmgc_menu_args'][2] ?? '') === 'fm_gifts_control_manage', 'admin menu requires the manage capability');
-\\FMGifts\\Control\\Plugin::assets('toplevel_page_fm-gifts-control');
+\FMGifts\Control\Plugin::assets('toplevel_page_fm-gifts-control');
 assert_true(($GLOBALS['fmgc_localized']['canApprove'] ?? false) === true, 'approval UI capability is passed separately');
 
 // 3. All REST endpoints are GET-only and enforce login, capability and nonce.
-\\FMGifts\\Control\\Plugin::routes();
+\FMGifts\Control\Plugin::routes();
 assert_true(count($GLOBALS['fmgc_routes']) === 5, 'five GET-only REST routes are registered');
 foreach ($GLOBALS['fmgc_routes'] as $route) assert_true($route['methods'] === 'GET', 'route method is GET');
 $validRequest = new WP_REST_Request([], ['X-WP-Nonce' => 'valid-nonce']);
-assert_true(\\FMGifts\\Control\\Plugin::permission($validRequest), 'valid authenticated capability and nonce are accepted');
+assert_true(\FMGifts\Control\Plugin::permission($validRequest), 'valid authenticated capability and nonce are accepted');
 $GLOBALS['fmgc_nonce_valid'] = false;
-assert_true(!\\FMGifts\\Control\\Plugin::permission($validRequest), 'invalid nonce is rejected');
+assert_true(!\FMGifts\Control\Plugin::permission($validRequest), 'invalid nonce is rejected');
 $GLOBALS['fmgc_nonce_valid'] = true;
+$missingNonceRequest = new WP_REST_Request([], []);
+assert_true(!\FMGifts\Control\Plugin::permission($missingNonceRequest), 'missing nonce is rejected');
 $GLOBALS['fmgc_logged_in'] = false;
-assert_true(!\\FMGifts\\Control\\Plugin::permission($validRequest), 'logged-out request is rejected');
+assert_true(!\FMGifts\Control\Plugin::permission($validRequest), 'logged-out request is rejected');
 $GLOBALS['fmgc_logged_in'] = true;
 $GLOBALS['fmgc_can']['fm_gifts_control_manage'] = false;
-assert_true(!\\FMGifts\\Control\\Plugin::permission($validRequest), 'user without manage capability is rejected');
+assert_true(!\FMGifts\Control\Plugin::permission($validRequest), 'user without manage capability is rejected');
 $GLOBALS['fmgc_can']['fm_gifts_control_manage'] = true;
 
 // 4. Product data uses WooCommerce CRUD getters and is read-only.
-$productResponse = \\FMGifts\\Control\\Plugin::products(new WP_REST_Request());
+$productResponse = \FMGifts\Control\Plugin::products(new WP_REST_Request());
 $productData = $productResponse->get_data();
 assert_true($productResponse->get_status() === 200 && count($productData['items']) === 1, 'product endpoint returns a WooCommerce product list');
 assert_true($productData['items'][0]['categories'] === ['Watches'] && $productData['items'][0]['stock_quantity'] === 8.0, 'product categories and stock are read via getters');
 
 // 5. Order list/detail payloads expose exactly the allowlisted fields.
-$orderResponse = \\FMGifts\\Control\\Plugin::orders(new WP_REST_Request());
+$orderResponse = \FMGifts\Control\Plugin::orders(new WP_REST_Request());
 $orderData = $orderResponse->get_data();
 $expectedKeys = ['order_id', 'order_status', 'date', 'currency', 'item_count', 'total', 'line_items'];
 assert_true($orderResponse->get_status() === 200 && array_keys($orderData[0]) === $expectedKeys, 'raw order list has only allowlisted top-level fields');
 assert_true(array_keys($orderData[0]['line_items'][0]) === ['product_name', 'quantity', 'line_total'], 'raw order line items have only allowlisted fields');
 $orderJson = json_encode($orderData, JSON_UNESCAPED_SLASHES);
 assert_true(!str_contains($orderJson, 'pii-canary') && !str_contains($orderJson, '1234567') && !str_contains($orderJson, '987654') && !str_contains($orderJson, 'TXN-PRIVATE'), 'raw order JSON excludes PII and transaction canaries');
-$detailResponse = \\FMGifts\\Control\\Plugin::order_detail(new WP_REST_Request(['id' => 501]));
+$detailResponse = \FMGifts\Control\Plugin::order_detail(new WP_REST_Request(['id' => 501]));
 assert_true($detailResponse instanceof WP_REST_Response && array_keys($detailResponse->get_data()) === $expectedKeys, 'order detail uses the same strict allowlist');
-assert_true(is_wp_error(\\FMGifts\\Control\\Plugin::order_detail(new WP_REST_Request(['id' => 999]))), 'missing order detail returns a 404-style WP_Error');
+assert_true(is_wp_error(\FMGifts\Control\Plugin::order_detail(new WP_REST_Request(['id' => 999]))), 'missing order detail returns a 404-style WP_Error');
 
 // 6. Diagnostics report passive metadata and never claim unverified status.
-$diagnostics = \\FMGifts\\Control\\Plugin::diagnostics(new WP_REST_Request())->get_data();
+$diagnostics = \FMGifts\Control\Plugin::diagnostics(new WP_REST_Request())->get_data();
 assert_true($diagnostics['hosting_identity'] === 'NOT VERIFIED' && $diagnostics['outbound_https'] === 'NOT TESTED', 'hosting and outbound status remain explicitly unverified/untested');
 assert_true(isset($diagnostics['php_extensions'], $diagnostics['rest_api'], $diagnostics['cron'], $diagnostics['hpos'], $diagnostics['plugin_tables'], $diagnostics['active_theme'], $diagnostics['server_metadata']['table_engine']), 'diagnostics cover runtime, REST, cron, HPOS, plugin tables, theme and server metadata');
 
 // 7. Approval queue is static, includes proposed values and all required states.
-$approvalData = \\FMGifts\\Control\\Plugin::approvals(new WP_REST_Request())->get_data();
+$approvalData = \FMGifts\Control\Plugin::approvals(new WP_REST_Request())->get_data();
 $approvalStates = array_column($approvalData['items'], 'state');
 assert_true($approvalData['simulation_only'] === true && $approvalData['persistence'] === 'browser-memory-only', 'approval queue is marked simulation-only and browser-memory-only');
 assert_true(count($approvalData['items']) === 5 && count(array_filter($approvalData['items'], static fn($item) => str_starts_with($item['id'], 'SIM-'))) === 5, 'approval queue contains only SIM-* IDs');
@@ -203,22 +205,22 @@ assert_true(isset($approvalData['items'][0]['proposed_price'], $approvalData['it
 foreach (['stale', 'approved-not-executed', 'failed', 'rejected'] as $state) assert_true(in_array($state, $approvalStates, true), 'sample queue includes ' . $state . ' state');
 
 // 8. Logger redacts sensitive keys and PII patterns before writing.
-$redacted = \\FMGifts\\Control\\Logger::redact(['email' => 'owner@example.invalid', 'message' => 'owner@example.invalid 192.0.2.10 +92 300 1234567 Bearer private-token']);
+$redacted = \FMGifts\Control\Logger::redact(['email' => 'owner@example.invalid', 'message' => 'owner@example.invalid 192.0.2.10 +92 300 1234567 Bearer private-token']);
 $redactedJson = json_encode($redacted);
 assert_true(!str_contains($redactedJson, 'owner@example.invalid') && !str_contains($redactedJson, '192.0.2.10') && !str_contains($redactedJson, '1234567') && !str_contains($redactedJson, 'private-token'), 'logger redactor removes email, IP, phone and bearer-token values');
-\\FMGifts\\Control\\Logger::log('warning', 'Synthetic log entry', ['customer_email' => 'owner@example.invalid']);
+\FMGifts\Control\Logger::log('warning', 'Synthetic log entry', ['customer_email' => 'owner@example.invalid']);
 assert_true(isset($GLOBALS['fmgc_logs'][0][2]['context']['customer_email']) && $GLOBALS['fmgc_logs'][0][2]['context']['customer_email'] === '[REDACTED]', 'logger writes redacted context only');
 
 // 9. Source-level guard: no outbound server HTTP clients or browser mutation methods.
 $phpFiles = glob($pluginRoot . '/*.php');
 $phpFiles = array_merge($phpFiles ?: [], glob($pluginRoot . '/includes/*.php') ?: []);
-$allPhp = implode("\\n", array_map('file_get_contents', $phpFiles));
+$allPhp = implode("\n", array_map('file_get_contents', $phpFiles));
 assert_true(!preg_match('/\\bwp_(?:safe_)?remote_(?:get|post|request)|curl_init\\s*\\(|curl_exec\\s*\\(|fsockopen\\s*\\(|stream_socket_client\\s*\\(/i', $allPhp), 'plugin contains no outbound PHP HTTP/socket client');
 assert_true(!preg_match('/register_rest_route\\([^;]+[\\'\\"](?:POST|PUT|PATCH|DELETE)[\\'\\"]/is', $allPhp), 'plugin declares no mutation REST methods');
 $js = file_get_contents($pluginRoot . '/assets/control.js');
-assert_true(str_contains($js, \"method:'GET'\") && str_contains($js, 'url.origin !== window.location.origin'), 'browser requests are GET-only and fail closed on cross-origin URLs');
+assert_true(str_contains($js, "method:'GET'") && str_contains($js, 'url.origin !== window.location.origin'), 'browser requests are GET-only and fail closed on cross-origin URLs');
 assert_true(!preg_match('/method:\\s*[\\'\\"](?:POST|PUT|PATCH|DELETE)[\\'\\"]/', $js) && !str_contains($js, 'localStorage') && !str_contains($js, 'sessionStorage'), 'browser UI has no mutation request or persistent approval storage');
-assert_true(str_contains($js, 'item.stale') && str_contains($js, \"item.state !== 'pending'\"), 'stale and non-pending sample items cannot be approved');
+assert_true(str_contains($js, 'item.stale') && str_contains($js, "item.state !== 'pending'"), 'stale and non-pending sample items cannot be approved');
 
 // 10. Uninstall removes only the plugin capabilities and version option.
 $GLOBALS['fmgc_options']['unrelated_option'] = 'keep-me';
