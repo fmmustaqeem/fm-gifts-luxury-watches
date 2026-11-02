@@ -216,10 +216,10 @@ $phpFiles = glob($pluginRoot . '/*.php');
 $phpFiles = array_merge($phpFiles ?: [], glob($pluginRoot . '/includes/*.php') ?: []);
 $allPhp = implode("\n", array_map('file_get_contents', $phpFiles));
 assert_true(!preg_match('/\\bwp_(?:safe_)?remote_(?:get|post|request)|curl_init\\s*\\(|curl_exec\\s*\\(|fsockopen\\s*\\(|stream_socket_client\\s*\\(/i', $allPhp), 'plugin contains no outbound PHP HTTP/socket client');
-assert_true(!preg_match('/register_rest_route\\([^;]+[\\'\\"](?:POST|PUT|PATCH|DELETE)[\\'\\"]/is', $allPhp), 'plugin declares no mutation REST methods');
+assert_true(!preg_match('/register_rest_route\([^;]+[\'"](?:POST|PUT|PATCH|DELETE)[\'"]/is', $allPhp), 'plugin declares no mutation REST methods');
 $js = file_get_contents($pluginRoot . '/assets/control.js');
 assert_true(str_contains($js, "method:'GET'") && str_contains($js, 'url.origin !== window.location.origin'), 'browser requests are GET-only and fail closed on cross-origin URLs');
-assert_true(!preg_match('/method:\\s*[\\'\\"](?:POST|PUT|PATCH|DELETE)[\\'\\"]/', $js) && !str_contains($js, 'localStorage') && !str_contains($js, 'sessionStorage'), 'browser UI has no mutation request or persistent approval storage');
+assert_true(!preg_match('/method:\s*[\'"](?:POST|PUT|PATCH|DELETE)[\'"]/', $js) && !str_contains($js, 'localStorage') && !str_contains($js, 'sessionStorage'), 'browser UI has no mutation request or persistent approval storage');
 assert_true(str_contains($js, 'item.stale') && str_contains($js, "item.state !== 'pending'"), 'stale and non-pending sample items cannot be approved');
 
 // 10. Uninstall removes only the plugin capabilities and version option.
