@@ -24,6 +24,8 @@ $assert(str_contains($source, 'SIM-1001') && str_contains($source, 'browser-memo
 $assert(str_contains($source, 'register_activation_hook') && str_contains($source, "add_option('fm_gifts_control_version'"), 'Activation is scoped to the version option and capabilities');
 $assert(str_contains($remove, 'remove_cap') && str_contains($remove, "delete_option('fm_gifts_control_version')") && !str_contains($remove, 'DROP TABLE'), 'Uninstall removes only owned capabilities and version option');
 $assert(str_contains($script, "['Image','Product','SKU','Price','Stock','Categories','Status']") && str_contains($script, 'p.image') && str_contains($script, 'p.categories'), 'Product UI renders thumbnail and categories');
+$assert(str_contains($script, "if (typeof rendered === 'string')") && str_contains($script, "container.addEventListener('click'") && str_contains($script, "item.state = 'approved-not-executed'"), 'Approval queue renders after async loading and uses inert delegated clicks');
+$assert(!str_contains($script, 'localStorage') && !str_contains($script, 'sessionStorage'), 'Approval state is not persisted in browser storage');
 $assert(!preg_match('/\\b(wp_remote_(get|post|request)|curl_exec|file_get_contents\\s*\\(\\s*[\'"]https?:)/i', $source), 'Plugin source contains no outbound HTTP client calls');
 $failed = array_filter($checks, static fn($ok) => !$ok);
 echo count($checks) . ' checks; ' . count($failed) . ' failures.' . PHP_EOL;

@@ -29,7 +29,15 @@
     try {
       const response = await fetch(endpoint(path), {method:'GET', credentials:'same-origin', headers});
       if (!response.ok) throw new Error('HTTP ' + response.status);
-      el.innerHTML = render(await response.json());
+      const rendered = render(await response.json());
+      if (typeof rendered === 'string') {
+        el.innerHTML = rendered;
+      } else if (rendered && typeof rendered.html === 'string') {
+        el.innerHTML = rendered.html;
+        if (typeof rendered.bind === 'function') rendered.bind(el);
+      } else {
+        el.textContent = 'No view was returned.';
+      }
     } catch (e) { el.textContent = 'Unable to load this read-only view: ' + e.message; }
   }
   load('products','fmgc-products-content', data => table(['Image','Product','SKU','Price','Stock','Categories','Status'], records(data).map(p=>{
@@ -47,19 +55,25 @@
         const stale = item.stale || item.state === 'stale';
         const state = item.state === 'approved-not-executed' ? 'APPROVED — NOT EXECUTED' : item.state.toUpperCase();
         const action = item.state === 'pending' && !stale && config.canApprove
-          ? '<button class="fmgc-action" data-id="'+esc(item.id)+'" data-state="approved-not-executed">Simulate approve</button>'
+          ? '<button class="fmgc-action" data-id="'+esc(item.id)+'">Simulate approve</button>'
           : '—';
         return '<tr><td>'+esc(item.id)+'</td><td>'+esc(item.label)+'</td><td>'+esc(item.proposed_price)+'</td><td>'+esc(item.proposed_stock)+'</td><td>'+esc(state)+(stale?' · STALE':'')+'</td><td>'+action+'</td></tr>';
       });
-      document.getElementById('fmgc-approvals-content').innerHTML = '<p><strong>SIMULATION ONLY.</strong> State exists in this browser page memory and is discarded on refresh. No price/stock action is executed.</p>' + table(['ID','Sample request','Proposed price','Proposed stock','State','Action'], rows);
-      document.querySelectorAll('#fmgc-approvals-content button').forEach(button => button.addEventListener('click', () => {
-        const item = items.find(x=>x.id===button.dataset.id);
-        if (!item || item.stale || item.state !== 'pending' || !config.canApprove) return;
-        item.state = button.dataset.state;
-        render();
-      }));
+      return '<p><strong>SIMULATION ONLY.</strong> State exists in this browser page memory and is discarded on refresh. No price/stock action is executed.</p>' + table(['ID','Sample request','Proposed price','Proposed stock','State','Action'], rows);
     };
-    render();
-    return '';
+    return {
+      html: render(),
+      bind: (container) => {
+        container.addEventListener('click', (event) => {
+          const target = event.target;
+          const button = target && typeof target.closest === 'function' ? target.closest('button[data-id]') : null;
+          if (!button) return;
+          const item = items.find(x=>x.id===button.dataset.id);
+          if (!item || item.stale || item.state !== 'pending' || !config.canApprove) return;
+          item.state = 'approved-not-executed';
+          container.innerHTML = render();
+        });
+      }
+    };
   });
 })();
