@@ -75,7 +75,7 @@ final class Plugin {
             </section>
             <section id="fmgc-products" class="fmgc-section"><h2>Products</h2><p>Read-only WooCommerce product data. No edit or mutation controls are provided.</p><div id="fmgc-products-content" class="fmgc-result" data-endpoint="products">Loading products…</div></section>
             <section id="fmgc-orders" class="fmgc-section"><h2>Orders</h2><p>Only allowlisted order fields are returned. Customer-identifying and payment details are excluded at the REST serialization layer.</p><div id="fmgc-orders-content" class="fmgc-result" data-endpoint="orders">Loading redacted order summary…</div></section>
-            <section id="fmgc-diagnostics" class="fmgc-section"><h2>Diagnostics</h2><div id="fmgc-diagnostics-content" class="fmgc-result" data-endpoint="diagnostics">Loading environment diagnostics…</div></section>
+            <section id="fmgc-diagnostics" class="fmgc-section"><h2>Diagnostics</h2><div id="fmgc-diagnostics-content" class="fmgc-result">Loading environment diagnostics…</div></section>
             <section id="fmgc-approvals" class="fmgc-section"><h2>Simulation queue</h2><p>Sample-only, browser-memory simulation. Nothing is saved or executed.</p><div id="fmgc-approvals-content" class="fmgc-result">Loading sample queue…</div></section>
             <footer class="fmgc-footer">FM Gifts Control Panel v<?php echo esc_html(self::VERSION); ?> · Local/staging prototype · No live-site deployment</footer>
         </div>
@@ -83,16 +83,15 @@ final class Plugin {
     }
 
     public static function permission(\WP_REST_Request $request): bool {
-        return is_user_logged_in()
-            && current_user_can(self::CAP_MANAGE)
-            && wp_verify_nonce((string) $request->get_header('X-WP-Nonce'), 'wp_rest') === 1;
+        $nonce = wp_verify_nonce((string) $request->get_header('X-WP-Nonce'), 'wp_rest');
+        return is_user_logged_in() && current_user_can(self::CAP_MANAGE) && $nonce !== false;
     }
 
     public static function routes(): void {
         $get = \WP_REST_Server::READABLE;
         register_rest_route(self::REST_NS, '/products', ['methods' => $get, 'callback' => [self::class, 'products'], 'permission_callback' => [self::class, 'permission']]);
         register_rest_route(self::REST_NS, '/orders', ['methods' => $get, 'callback' => [self::class, 'orders'], 'permission_callback' => [self::class, 'permission']]);
-        register_rest_route(self::REST_NS, '/orders/(?P<id>\d+)', ['methods' => $get, 'callback' => [self::class, 'order_detail'], 'permission_callback' => [self::class, 'permission']]);
+        register_rest_route(self::REST_NS, '/orders/(?P<id>\\d+)', ['methods' => $get, 'callback' => [self::class, 'order_detail'], 'permission_callback' => [self::class, 'permission']]);
         register_rest_route(self::REST_NS, '/diagnostics', ['methods' => $get, 'callback' => [self::class, 'diagnostics'], 'permission_callback' => [self::class, 'permission']]);
         register_rest_route(self::REST_NS, '/approvals', ['methods' => $get, 'callback' => [self::class, 'approvals'], 'permission_callback' => [self::class, 'permission']]);
     }
@@ -159,11 +158,18 @@ final class Plugin {
         $extensions = ['curl', 'openssl', 'mysqli', 'mbstring', 'json', 'zip', 'gd', 'intl', 'fileinfo', 'xml'];
         $extension_status = [];
         foreach ($extensions as $extension) { $extension_status[$extension] = extension_loaded($extension); }
-        $tables = [];
+
+        $woocommerce_tables = [];
         foreach (['woocommerce_sessions', 'wc_orders', 'wc_order_addresses', 'wc_order_operational_data', 'wc_orders_meta'] as $suffix) {
             $table = $wpdb->prefix . $suffix;
-            $tables[$suffix] = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($table))) === $table;
+            $woocommerce_tables[$suffix] = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($table))) === $table;
         }
+
+        $plugin_table_prefix = $wpdb->prefix . 'fm_gifts_control_';
+        $plugin_tables = $wpdb->get_col($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($plugin_table_prefix) . '%'));
+        $engines = $wpdb->get_col('SELECT DISTINCT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND ENGINE IS NOT NULL ORDER BY ENGINE');
+        $server_software = isset($_SERVER['SERVER_SOFTWARE']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_SOFTWARE'])) : 'NOT REPORTED';
+
         return new \WP_REST_Response([
             'php' => PHP_VERSION,
             'wordpress' => get_bloginfo('version'),
@@ -173,11 +179,16 @@ final class Plugin {
             'max_execution_time' => (int) ini_get('max_execution_time'),
             'rest_api' => rest_url(self::REST_NS),
             'cron_enabled' => !defined('DISABLE_WP_CRON') || !DISABLE_WP_CRON,
-            'hpos_enabled' => class_exists('\Automattic\WooCommerce\Utilities\OrderUtil')
-                ? \Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled() : false,
-            'woocommerce_tables' => $tables,
+            'hpos_enabled' => class_exists('\\Automattic\\WooCommerce\\Utilities\\OrderUtil')
+                ? \\Automattic\\WooCommerce\\Utilities\\OrderUtil::custom_orders_table_usage_is_enabled() : false,
+            'woocommerce_tables' => $woocommerce_tables,
+            'plugin_tables' => is_array($plugin_tables) ? array_values($plugin_tables) : [],
             'active_theme' => wp_get_theme()->get('Name'),
-            'server_metadata' => ['hostname' => 'NOT COLLECTED', 'software' => 'NOT COLLECTED', 'table_engine' => 'NOT COLLECTED'],
+            'server_metadata' => [
+                'hostname' => function_exists('gethostname') ? (gethostname() ?: 'NOT REPORTED') : 'NOT AVAILABLE',
+                'software' => $server_software,
+                'table_engine' => is_array($engines) && $engines ? implode(', ', array_map('sanitize_text_field', $engines)) : 'NOT REPORTED',
+            ],
             'hosting_identity' => 'NOT VERIFIED',
             'outbound_https' => 'NOT TESTED',
         ], 200);

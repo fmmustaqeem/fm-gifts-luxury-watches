@@ -17,7 +17,11 @@
       el.innerHTML = render(await response.json());
     } catch (e) { el.textContent = 'Unable to load this read-only view: ' + e.message; }
   }
-  load('products','fmgc-products-content', data => table(['Product','SKU','Price','Stock','Status'], (data.items||[]).map(p=>'<tr><td>'+esc(p.name)+'</td><td>'+esc(p.sku)+'</td><td>'+esc(p.price)+'</td><td>'+esc(p.stock_status)+' / '+esc(p.stock_quantity)+'</td><td>'+esc(p.status)+'</td></tr>')));
+  load('products','fmgc-products-content', data => table(['Image','Product','SKU','Price','Stock','Categories','Status'], (data.items||[]).map(p=>{
+    const image = p.image ? '<img class="fmgc-product-thumb" src="'+esc(p.image)+'" alt="" loading="lazy">' : '—';
+    const categories = Array.isArray(p.categories) && p.categories.length ? p.categories.join(', ') : '—';
+    return '<tr><td>'+image+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.sku)+'</td><td>'+esc(p.price)+'</td><td>'+esc(p.stock_status)+' / '+esc(p.stock_quantity)+'</td><td>'+esc(categories)+'</td><td>'+esc(p.status)+'</td></tr>';
+  })));
   load('orders','fmgc-orders-content', data => table(['Order','Date','Status','Items','Total'], (data.items||[]).map(o=>'<tr><td>#'+esc(o.order_id)+'</td><td>'+esc(o.date)+'</td><td>'+esc(o.order_status)+'</td><td>'+esc(o.item_count)+'</td><td>'+esc(o.currency)+' '+esc(o.total)+'</td></tr>')));
   load('diagnostics','fmgc-diagnostics-content', data => table(['Check','Result'], Object.entries(data).map(([k,v])=>'<tr><td>'+esc(k)+'</td><td><code>'+esc(typeof v === 'object' ? JSON.stringify(v) : v)+'</code></td></tr>')));
   load('approvals','fmgc-approvals-content', data => {
