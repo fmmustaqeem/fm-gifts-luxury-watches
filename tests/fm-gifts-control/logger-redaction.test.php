@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../../wordpress/wp-content/plugins/fm-gifts-control/includes/class-logger.php';
 
-use FMGifts\\Control\\Logger;
+use FMGifts\Control\Logger;
 
 $input = (object) [
     'profile' => (object) [
