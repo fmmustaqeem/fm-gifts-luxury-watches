@@ -15,7 +15,7 @@ $script = is_file($js) ? (string) file_get_contents($js) : '';
 $assert($source !== '', 'Plugin bootstrap exists');
 $assert(str_contains($source, 'READ-ONLY PROTOTYPE') && str_contains($source, 'LOCAL / STAGING'), 'Persistent safety labels are present');
 $assert(str_contains($source, 'wc_get_products') && str_contains($source, 'wc_get_orders') && str_contains($source, 'wc_get_order'), 'WooCommerce CRUD read APIs are used');
-$assert(str_contains($source, "'methods' => $get") && str_contains($source, '$get = \\WP_REST_Server::READABLE'), 'REST routes are GET-only');
+$assert(str_contains($source, "'methods' => " . '$get') && str_contains($source, '$get = \\WP_REST_Server::READABLE'), 'REST routes are GET-only');
 $assert(str_contains($source, 'wp_verify_nonce') && str_contains($source, '$nonce !== false') && str_contains($source, 'current_user_can'), 'REST routes require a valid nonce and capability');
 $assert(str_contains($source, "'order_id'") && str_contains($source, "'line_items'") && !str_contains($source, "'billing_email'"), 'Order serializer uses an explicit allowlist');
 $assert(str_contains($source, "'plugin_tables'") && str_contains($source, "'server_metadata'") && str_contains($source, "'hostname'"), 'Diagnostics expose plugin tables and bounded server metadata');

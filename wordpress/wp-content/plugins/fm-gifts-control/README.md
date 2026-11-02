@@ -1,29 +1,23 @@
 # FM Gifts Control Panel — Phase 2 prototype
 
-**Status:** Source implementation with static safety checks; isolated WordPress/WooCommerce integration tests still required.
+**Status:** Read-only source implementation; standalone behavioral safety tests included. Real LOCAL / STAGING WordPress + WooCommerce integration checks remain required.
 
 ## Scope
-- Read-only product and order views using WooCommerce CRUD APIs.
-- Product thumbnails and categories are rendered in the dashboard.
-- Order REST output is an allowlist; customer and payment identifiers are not serialized.
-- Diagnostics report PHP/WP/WooCommerce, PHP extensions, WooCommerce tables, plugin-owned tables, active theme, and limited server metadata (hostname, server software, and distinct table engines).
+- Theme-independent WordPress admin panel with persistent `READ-ONLY PROTOTYPE` and `LOCAL / STAGING` labels.
+- Read-only WooCommerce product views via `wc_get_products()` and product CRUD getters, including thumbnail and categories.
+- Read-only order list/detail responses with a strict allowlist: `order_id`, `order_status`, `date`, `currency`, `item_count`, `total`, and line items `product_name`, `quantity`, `line_total` only.
+- PII-aware log redaction for sensitive context keys, email, phone, IP and bearer tokens.
+- Diagnostics for PHP/WP/WooCommerce, PHP extensions, REST, cron, HPOS, WooCommerce/plugin tables, theme and limited server metadata.
 - Hosting identity remains `NOT VERIFIED`; outbound HTTPS remains `NOT TESTED`. No outbound request is made.
-- Approval queue is hardcoded sample data. UI state is browser-memory-only and never executes store changes.
-- GET-only REST endpoints require a logged-in user, the custom capability, and a valid WordPress REST nonce.
-
-## Files
-- `fm-gifts-control.php`: plugin bootstrap, admin page, REST routes and serializers.
-- `uninstall.php`: removes only the two plugin capabilities and its version option.
-- `assets/`: dashboard presentation and browser-only sample queue behavior.
-- `tests/fm-gifts-control/static-safety.php`: static source guard checks (not a WordPress integration test).
+- Hardcoded `SIM-*` approval samples include proposed price/stock, stale, approved-not-executed, failed and rejected states. Browser state is memory-only; stale items cannot be approved.
+- GET-only REST endpoints require login, `fm_gifts_control_manage`, and a valid WordPress REST nonce. No mutation route exists.
 
 ## Run local checks
 ```sh
-php -l wordpress/wp-content/plugins/fm-gifts-control/fm-gifts-control.php
-php -l wordpress/wp-content/plugins/fm-gifts-control/uninstall.php
-php -l tests/fm-gifts-control/static-safety.php
-php tests/fm-gifts-control/static-safety.php
+php -d display_errors=1 tests/fm-gifts-control/run.php
+find wordpress/wp-content/plugins/fm-gifts-control tests/fm-gifts-control -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+node --check wordpress/wp-content/plugins/fm-gifts-control/assets/control.js
 ```
 
 ## Not yet proven
-Activation/uninstall database write counts, live WP capability enforcement, actual REST response PII inspection, HPOS behavior, and zero outbound HTTP require an isolated WordPress/WooCommerce test harness. Do not install on ByetHost or use production store data.
+The standalone harness uses WordPress/WooCommerce stubs. It does not replace real LOCAL / STAGING activation, REST, HPOS, browser, database-write-count or uninstall tests. See `tests/fm-gifts-control/MANUAL-TESTS.md`. Do not install or activate on live ByetHost without separate approval.
