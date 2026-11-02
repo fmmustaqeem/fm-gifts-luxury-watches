@@ -1,0 +1,78 @@
+name: WakilGPT Read-only Diagnostic
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wakilgpt-readonly-diagnostic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  diagnose:
+    name: FM Gifts read-only baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Generate read-only diagnostic report
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p diagnostic-report
+          report="diagnostic-report/wakilgpt-readonly-report.md"
+
+          {
+            echo "# WakilGPT Read-only Diagnostic"
+            echo
+            echo "- Repository: ${GITHUB_REPOSITORY}"
+            echo "- Ref: ${GITHUB_REF}"
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Run ID: ${GITHUB_RUN_ID}"
+            echo "- Generated (UTC): $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            echo
+            echo "## Safety scope"
+            echo "- Read-only checkout; no repository writes."
+            echo "- No secrets are read, printed, or transmitted."
+            echo "- No deployment, external API call, or AI-provider call."
+            echo
+            echo "## Repository checks"
+            for path in README.md index.html wordpress/wp-content/themes/fm-gifts-luxury wordpress/wp-content/plugins/fm-gifts-core wordpress/wp-content/plugins/fm-gifts-ai; do
+              if [ -e "$path" ]; then
+                echo "- PRESENT: `$path`"
+              else
+                echo "- MISSING: `$path`"
+              fi
+            done
+            echo
+            echo "## Tracked file inventory"
+            git ls-files | sed -n '1,250p'
+            echo
+            echo "## Git working-tree status"
+            if [ -z "$(git status --porcelain)" ]; then
+              echo "Clean"
+            else
+              git status --short
+            fi
+            echo
+            echo "## Interpretation"
+            echo "This is a scripted baseline diagnostic, not an LLM-powered autonomous agent."
+            echo "It does not establish live-site availability or runner registration."
+          } > "$report"
+
+          test -s "$report"
+          echo "Report generated: $report"
+
+      - name: Upload diagnostic report
+        uses: actions/upload-artifact@v4
+        with:
+          name: wakilgpt-readonly-diagnostic
+          path: diagnostic-report/wakilgpt-readonly-report.md
+          if-no-files-found: error
+          retention-days: 7
