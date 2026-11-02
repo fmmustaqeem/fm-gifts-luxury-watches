@@ -1,0 +1,107 @@
+name: FM Gifts Control Panel — Phase 2 Local Build & Test
+
+on:
+  push:
+    branches:
+      - feat/fm-gifts-control-panel-phase2-2026-11-02
+    paths:
+      - "wordpress/wp-content/plugins/fm-gifts-control/**"
+      - "tests/fm-gifts-control/**"
+      - ".github/workflows/fm-gifts-control-phase2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fm-gifts-control-phase2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  local-build-test:
+    name: PHP syntax and safety checks (Android DroidRunner)
+    runs-on:
+      - self-hosted
+      - linux
+      - ARM64
+      - android
+      - android-api-33
+      - arm64
+      - soc-spreadtrum-t820-ums9620-2h10-unisoc-t820
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout Phase 2 branch only
+        uses: actions/checkout@v4
+        with:
+          ref: feat/fm-gifts-control-panel-phase2-2026-11-02
+          persist-credentials: false
+
+      - name: Identify isolated runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Runner: ${RUNNER_NAME:-unknown}"
+          echo "OS: ${RUNNER_OS:-unknown} / ${RUNNER_ARCH:-unknown}"
+          echo "Branch: ${GITHUB_REF_NAME}"
+          echo "Commit: ${GITHUB_SHA}"
+          echo "This workflow performs repository-local checks only."
+          echo "No FTP, deployment, live-site requests, or external provider calls."
+
+      - name: Check PHP availability
+        id: php
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v php >/dev/null 2>&1; then
+            echo "::error::PHP CLI is not installed or not on PATH in the DroidRunner environment."
+            echo "PHP CLI: NOT AVAILABLE" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          php -v
+          php -r 'printf("PHP_VERSION=%s\\n", PHP_VERSION);'
+
+      - name: Lint plugin PHP files
+        shell: bash
+        run: |
+          set -euo pipefail
+          PLUGIN_DIR="wordpress/wp-content/plugins/fm-gifts-control"
+          if [ ! -d "$PLUGIN_DIR" ]; then
+            echo "::error::Plugin directory is not present on this branch yet."
+            echo "Plugin source: NOT READY — no PHP files to lint." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          mapfile -d '' files < <(find "$PLUGIN_DIR" -type f -name '*.php' -print0)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "::error::No PHP files found in plugin directory."
+            exit 1
+          fi
+          for file in "${files[@]}"; do
+            php -l "$file"
+          done
+
+      - name: Verify required safety markers
+        shell: bash
+        run: |
+          set -euo pipefail
+          MAIN="wordpress/wp-content/plugins/fm-gifts-control/fm-gifts-control.php"
+          test -s "$MAIN"
+          grep -q "READ-ONLY PROTOTYPE" "$MAIN"
+          grep -q "LOCAL / STAGING" "$MAIN"
+          echo "Required local/read-only markers: PASS"
+
+      - name: Record test result
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## FM Gifts Control Panel — Phase 2"
+            echo
+            echo "- Branch: ${GITHUB_REF_NAME}"
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Runner: ${RUNNER_NAME:-unknown} (${RUNNER_ARCH:-unknown})"
+            echo "- Scope: repository-local PHP syntax and safety-marker checks"
+            echo "- Deployment/live-site access: NOT PART OF THIS WORKFLOW"
+            echo
+            echo "Full step outcomes are recorded above in this Actions run."
+          } >> "$GITHUB_STEP_SUMMARY"
