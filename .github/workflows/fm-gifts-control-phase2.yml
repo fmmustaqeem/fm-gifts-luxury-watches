@@ -48,27 +48,73 @@ jobs:
           echo "This workflow performs repository-local checks only."
           echo "No FTP, deployment, live-site requests, or external provider calls."
 
-      - name: Diagnose PRoot package-manager permissions (read-only)
+      - name: Diagnose Termux and PRoot visibility (read-only)
         shell: bash
         run: |
-          set -u
-          echo "Identity:"
+          set +e
+          echo "=== Process identity and environment ==="
           id
-          echo "UID mapping:"
-          cat /proc/self/uid_map 2>&1 || true
-          echo "dpkg directory permissions:"
-          ls -ld /var/lib/dpkg /var/lib/dpkg/status /var/lib/dpkg/updates 2>&1 || true
-          echo "Filesystem mount:"
-          grep -E ' /var | /var/lib| / ' /proc/mounts 2>&1 || true
-          echo "Write permission test (no file is created):"
-          if [ -w /var/lib/dpkg ] && [ -w /var/lib/dpkg/status ]; then
-            echo "dpkg paths report writable to this process."
-          else
-            echo "::warning::dpkg paths are not writable to this PRoot process."
-          fi
-          echo "PHP availability:"
-          command -v php || true
-          echo "No package manager command was run; this diagnostic is read-only."
+          printf 'PATH=%s\nPREFIX=%s\nHOME=%s\n' "$PATH" "${PREFIX:-unset}" "${HOME:-unset}"
+          printf 'self root: '; readlink /proc/self/root 2>&1
+          printf 'self cwd: '; readlink /proc/self/cwd 2>&1
+          echo
+          echo "=== Relevant mount table entries ==="
+          grep -Ei 'termux|/data|/storage|/usr| / ' /proc/self/mountinfo 2>&1 | head -n 100
+          echo
+          echo "=== Candidate Termux roots ==="
+          for path in \
+            /data/data/com.termux \
+            /data/user/0/com.termux \
+            /data/user_de/0/com.termux \
+            /data/data/com.termux/files/usr \
+            /data/user/0/com.termux/files/usr \
+            "${PREFIX:-/__prefix_unset__}"; do
+            if [ -e "$path" ]; then
+              ls -ld "$path" 2>&1
+              stat -c 'mode=%A uid=%u gid=%g type=%F' "$path" 2>&1
+            else
+              echo "NOT VISIBLE: $path"
+            fi
+          done
+          echo
+          echo "=== PHP candidate visibility and permissions ==="
+          for path in \
+            "$(command -v php 2>/dev/null)" \
+            /data/data/com.termux/files/usr/bin/php \
+            /data/user/0/com.termux/files/usr/bin/php \
+            /usr/bin/php \
+            /usr/local/bin/php \
+            /bin/php; do
+            [ -n "$path" ] || continue
+            if [ -e "$path" ]; then
+              ls -l "$path" 2>&1
+              stat -c 'mode=%A uid=%u gid=%g size=%s' "$path" 2>&1
+              readlink -f "$path" 2>&1
+              command -v file >/dev/null 2>&1 && file "$path" 2>&1
+              if command -v readelf >/dev/null 2>&1; then
+                echo "-- ELF interpreter and dynamic dependencies for $path --"
+                readelf -l "$path" 2>&1 | grep -i -A1 'interpreter' || true
+                readelf -d "$path" 2>&1 | grep -E 'NEEDED|RPATH|RUNPATH' || true
+              else
+                echo "readelf unavailable; ELF dependencies not inspected."
+              fi
+            else
+              echo "NOT VISIBLE: $path"
+            fi
+          done
+          echo
+          echo "=== Access checks (no files created) ==="
+          for path in /data /data/data /data/data/com.termux /data/data/com.termux/files/usr/bin; do
+            if [ -e "$path" ]; then
+              printf '%s: ' "$path"
+              [ -r "$path" ] && printf 'readable ' || printf 'not-readable '
+              [ -x "$path" ] && printf 'traversable\n' || printf 'not-traversable\n'
+            else
+              echo "$path: absent"
+            fi
+          done
+          echo
+          echo "Read-only diagnostic complete; no package manager or filesystem writes were attempted."
 
       - name: Locate PHP CLI (Termux host or DroidRunner)
         id: php
@@ -80,6 +126,7 @@ jobs:
             "$(command -v php 2>/dev/null || true)" \
             "${PREFIX:-}/bin/php" \
             "/data/data/com.termux/files/usr/bin/php" \
+            "/data/user/0/com.termux/files/usr/bin/php" \
             "/usr/bin/php" \
             "/usr/local/bin/php" \
             "/bin/php"; do
@@ -89,11 +136,8 @@ jobs:
             fi
           done
           if [ -z "$PHP_BIN" ]; then
-            echo "::error::PHP CLI is not visible inside the DroidRunner job. Termux PHP may not be mounted into this PRoot."
+            echo "::error::PHP CLI is not visible inside the DroidRunner job. See read-only mount diagnostics above."
             echo "PHP CLI: BLOCKED — no executable found in PATH or common Termux/Linux locations." >> "$GITHUB_STEP_SUMMARY"
-            echo "PATH=$PATH"
-            echo "PREFIX=${PREFIX:-unset}"
-            ls -ld /data/data/com.termux/files/usr/bin/php /usr/bin/php /usr/local/bin/php 2>&1 || true
             exit 1
           fi
           echo "php_bin=$PHP_BIN" >> "$GITHUB_OUTPUT"
@@ -139,7 +183,7 @@ jobs:
             echo "- Branch: ${GITHUB_REF_NAME}"
             echo "- Commit: ${GITHUB_SHA}"
             echo "- Runner: ${RUNNER_NAME:-unknown} (${RUNNER_ARCH:-unknown})"
-            echo "- Scope: repository-local PHP syntax and safety-marker checks"
+            echo "- Scope: read-only Termux/PRoot diagnostics plus repository-local PHP syntax and safety-marker checks"
             echo "- Deployment/live-site access: NOT PART OF THIS WORKFLOW"
             echo
             echo "Full step outcomes are recorded above in this Actions run."
