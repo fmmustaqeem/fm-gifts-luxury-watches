@@ -18,6 +18,7 @@ defined( 'ABSPATH' ) || exit;
       <?php } ?>
       <?php if ( function_exists( 'wc_get_cart_url' ) ) : ?><a class="fm-link" href="<?php echo esc_url( wc_get_cart_url() ); ?>"><?php esc_html_e( 'Cart', 'fm-gifts-luxury' ); ?></a><?php endif; ?>
     </nav>
+    <button class="fm-theme-toggle" type="button" aria-pressed="false" aria-label="<?php esc_attr_e( 'Switch to dark mode', 'fm-gifts-luxury' ); ?>">Dark mode</button>
   </div>
 </header>
 <main id="main-content">
