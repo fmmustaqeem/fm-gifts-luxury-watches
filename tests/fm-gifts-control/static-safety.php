@@ -1,0 +1,32 @@
+<?php
+declare(strict_types=1);
+$root = dirname(__DIR__, 2) . '/wordpress/wp-content/plugins/fm-gifts-control';
+$main = $root . '/fm-gifts-control.php';
+$uninstall = $root . '/uninstall.php';
+$js = $root . '/assets/control.js';
+$checks = [];
+$assert = static function (bool $ok, string $name) use (&$checks): void {
+    $checks[$name] = $ok;
+    echo ($ok ? 'PASS' : 'FAIL') . ' - ' . $name . PHP_EOL;
+};
+$source = is_file($main) ? (string) file_get_contents($main) : '';
+$remove = is_file($uninstall) ? (string) file_get_contents($uninstall) : '';
+$script = is_file($js) ? (string) file_get_contents($js) : '';
+$assert($source !== '', 'Plugin bootstrap exists');
+$assert(str_contains($source, 'READ-ONLY PROTOTYPE') && str_contains($source, 'LOCAL / STAGING'), 'Persistent safety labels are present');
+$assert(str_contains($source, 'wc_get_products') && str_contains($source, 'wc_get_orders') && str_contains($source, 'wc_get_order'), 'WooCommerce CRUD read APIs are used');
+$assert(str_contains($source, "'methods' => " . '$get') && str_contains($source, '$get = \\WP_REST_Server::READABLE'), 'REST routes are GET-only');
+$assert(str_contains($source, 'wp_verify_nonce') && str_contains($source, '$nonce !== false') && str_contains($source, 'current_user_can'), 'REST routes require a valid nonce and capability');
+$assert(str_contains($source, "'order_id'") && str_contains($source, "'line_items'") && !str_contains($source, "'billing_email'"), 'Order serializer uses an explicit allowlist');
+$assert(str_contains($source, "'plugin_tables'") && str_contains($source, "'server_metadata'") && str_contains($source, "'hostname'"), 'Diagnostics expose plugin tables and bounded server metadata');
+$assert(str_contains($source, 'NOT VERIFIED') && str_contains($source, 'NOT TESTED'), 'Hosting and outbound status are not fabricated');
+$assert(str_contains($source, 'SIM-1001') && str_contains($source, 'browser-memory-only') && str_contains($source, "'state' => 'stale'"), 'Approval queue is sample-only and includes stale state');
+$assert(str_contains($source, 'register_activation_hook') && str_contains($source, "add_option('fm_gifts_control_version'"), 'Activation is scoped to the version option and capabilities');
+$assert(str_contains($remove, 'remove_cap') && str_contains($remove, "delete_option('fm_gifts_control_version')") && !str_contains($remove, 'DROP TABLE'), 'Uninstall removes only owned capabilities and version option');
+$assert(str_contains($script, "['Image','Product','SKU','Price','Stock','Categories','Status']") && str_contains($script, 'p.image') && str_contains($script, 'p.categories'), 'Product UI renders thumbnail and categories');
+$assert(str_contains($script, "if (typeof rendered === 'string')") && str_contains($script, "container.addEventListener('click'") && str_contains($script, "item.state = 'approved-not-executed'"), 'Approval queue renders after async loading and uses inert delegated clicks');
+$assert(!str_contains($script, 'localStorage') && !str_contains($script, 'sessionStorage'), 'Approval state is not persisted in browser storage');
+$assert(!preg_match('/\\b(wp_remote_(get|post|request)|curl_exec|file_get_contents\\s*\\(\\s*[\'"]https?:)/i', $source), 'Plugin source contains no outbound HTTP client calls');
+$failed = array_filter($checks, static fn($ok) => !$ok);
+echo count($checks) . ' checks; ' . count($failed) . ' failures.' . PHP_EOL;
+exit($failed ? 1 : 0);

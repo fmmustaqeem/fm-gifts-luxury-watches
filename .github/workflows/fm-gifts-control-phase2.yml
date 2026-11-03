@@ -1,0 +1,218 @@
+name: FM Gifts Control Panel — Phase 2 Local Build & Test
+
+on:
+  push:
+    branches:
+      - feat/fm-gifts-control-panel-phase2-2026-11-02
+    paths:
+      - "wordpress/wp-content/plugins/fm-gifts-control/**"
+      - "tests/fm-gifts-control/**"
+      - ".github/workflows/fm-gifts-control-phase2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fm-gifts-control-phase2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php-checks:
+    name: PHP checks (GitHub-hosted — only unavailable on DroidRunner)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout Phase 2 branch only
+        uses: actions/checkout@v4
+        with:
+          ref: feat/fm-gifts-control-panel-phase2-2026-11-02
+          persist-credentials: false
+
+      - name: Set up PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: none
+          coverage: none
+
+      - name: Lint available Phase 2 PHP files
+        shell: bash
+        run: |
+          set -euo pipefail
+          PLUGIN_DIR="wordpress/wp-content/plugins/fm-gifts-control"
+          TEST_DIR="tests/fm-gifts-control"
+          mapfile -d '' files < <(
+            find "$PLUGIN_DIR" "$TEST_DIR" -type f -name '*.php' -print0 2>/dev/null || true
+          )
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "PHP source/tests: NOT RUN — Phase 2 PHP files are not present yet." >> "$GITHUB_STEP_SUMMARY"
+            echo "No source was available; this is not a Phase 2 pass."
+            exit 0
+          fi
+          php --version
+          for file in "${files[@]}"; do
+            php -l "$file"
+          done
+          echo "PHP syntax lint: PASS (${#files[@]} files)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run Phase 2 static safety tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          php tests/fm-gifts-control/static-safety.php
+
+      - name: Run standalone PHP behavior tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -d display_errors=1 tests/fm-gifts-control/run.php
+          php -d display_errors=1 tests/fm-gifts-control/logger-redaction.test.php
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run JavaScript syntax and regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wordpress/wp-content/plugins/fm-gifts-control/assets/control.js
+          node tests/fm-gifts-control/control-js.test.js
+
+      - name: Verify required safety markers when plugin source exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          MAIN="wordpress/wp-content/plugins/fm-gifts-control/fm-gifts-control.php"
+          if [ ! -s "$MAIN" ]; then
+            echo "Safety marker checks: NOT RUN — plugin entry file is not present yet." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          grep -q "READ-ONLY PROTOTYPE" "$MAIN"
+          grep -q "LOCAL / STAGING" "$MAIN"
+          echo "Required local/read-only markers: PASS" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Hosted PHP job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo
+            echo "### GitHub-hosted PHP checks"
+            echo "- Runner: GitHub-hosted ubuntu-24.04"
+            echo "- PHP: 8.3"
+            echo "- Purpose: PHP checks unavailable inside the isolated DroidRunner PRoot"
+            echo "- Scope: repository-local files only; no deployment or live-site access"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  android-diagnostics:
+    name: Android / PRoot diagnostics (self-hosted)
+    runs-on:
+      - self-hosted
+      - linux
+      - ARM64
+      - android
+      - android-api-33
+      - arm64
+      - soc-spreadtrum-t820-ums9620-2h10-unisoc-t820
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout Phase 2 branch only
+        uses: actions/checkout@v4
+        with:
+          ref: feat/fm-gifts-control-panel-phase2-2026-11-02
+          persist-credentials: false
+
+      - name: Identify self-hosted runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Runner: ${RUNNER_NAME:-unknown}"
+          echo "OS: ${RUNNER_OS:-unknown} / ${RUNNER_ARCH:-unknown}"
+          echo "Branch: ${GITHUB_REF_NAME}"
+          echo "Commit: ${GITHUB_SHA}"
+          echo "This job is reserved for Android/PRoot-specific diagnostics."
+          echo "No FTP, deployment, live-site requests, or external provider calls."
+
+      - name: Diagnose Termux and PRoot visibility (read-only)
+        shell: bash
+        run: |
+          set +e
+          echo "=== Process identity and environment ==="
+          id
+          printf 'PATH=%s\nPREFIX=%s\nHOME=%s\n' "$PATH" "${PREFIX:-unset}" "${HOME:-unset}"
+          printf 'self root: '; readlink /proc/self/root 2>&1
+          printf 'self cwd: '; readlink /proc/self/cwd 2>&1
+          echo
+          echo "=== Relevant mount table entries ==="
+          grep -Ei 'termux|/data|/storage|/usr| / ' /proc/self/mountinfo 2>&1 | head -n 100
+          echo
+          echo "=== Candidate Termux roots ==="
+          for path in \
+            /data/data/com.termux \
+            /data/user/0/com.termux \
+            /data/user_de/0/com.termux \
+            /data/data/com.termux/files/usr \
+            /data/user/0/com.termux/files/usr \
+            "${PREFIX:-/__prefix_unset__}"; do
+            if [ -e "$path" ]; then
+              ls -ld "$path" 2>&1
+              stat -c 'mode=%A uid=%u gid=%g type=%F' "$path" 2>&1
+            else
+              echo "NOT VISIBLE: $path"
+            fi
+          done
+          echo
+          echo "=== PHP visibility (diagnostic only; PHP tests run in hosted job) ==="
+          for path in \
+            "$(command -v php 2>/dev/null)" \
+            /data/data/com.termux/files/usr/bin/php \
+            /data/user/0/com.termux/files/usr/bin/php \
+            /usr/bin/php \
+            /usr/local/bin/php \
+            /bin/php; do
+            [ -n "$path" ] || continue
+            if [ -e "$path" ]; then
+              ls -l "$path" 2>&1
+              stat -c 'mode=%A uid=%u gid=%g size=%s' "$path" 2>&1
+              readlink -f "$path" 2>&1
+              command -v file >/dev/null 2>&1 && file "$path" 2>&1
+              if command -v readelf >/dev/null 2>&1; then
+                readelf -l "$path" 2>&1 | grep -i -A1 'interpreter' || true
+                readelf -d "$path" 2>&1 | grep -E 'NEEDED|RPATH|RUNPATH' || true
+              fi
+            else
+              echo "NOT VISIBLE: $path"
+            fi
+          done
+          echo
+          echo "=== Access checks (no files created) ==="
+          for path in /data /data/data /data/data/com.termux /data/data/com.termux/files/usr/bin; do
+            if [ -e "$path" ]; then
+              printf '%s: ' "$path"
+              [ -r "$path" ] && printf 'readable ' || printf 'not-readable '
+              [ -x "$path" ] && printf 'traversable\n' || printf 'not-traversable\n'
+            else
+              echo "$path: absent"
+            fi
+          done
+          echo
+          echo "Read-only Android/PRoot diagnostic complete; no package manager or filesystem writes."
+
+      - name: Self-hosted job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Self-hosted Android diagnostics"
+            echo
+            echo "- Runner: ${RUNNER_NAME:-unknown} (${RUNNER_ARCH:-unknown})"
+            echo "- Branch: ${GITHUB_REF_NAME}"
+            echo "- Scope: Android, Termux/PRoot mount visibility, and PHP executable visibility only"
+            echo "- PHP lint/tests: delegated to GitHub-hosted job because Termux is not mounted in this PRoot"
+            echo "- Deployment/live-site access: NOT PART OF THIS WORKFLOW"
+          } >> "$GITHUB_STEP_SUMMARY"
