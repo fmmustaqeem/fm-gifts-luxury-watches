@@ -63,6 +63,25 @@ jobs:
           set -euo pipefail
           php tests/fm-gifts-control/static-safety.php
 
+      - name: Run standalone PHP behavior tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -d display_errors=1 tests/fm-gifts-control/run.php
+          php -d display_errors=1 tests/fm-gifts-control/logger-redaction.test.php
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run JavaScript syntax and regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wordpress/wp-content/plugins/fm-gifts-control/assets/control.js
+          node tests/fm-gifts-control/control-js.test.js
+
       - name: Verify required safety markers when plugin source exists
         shell: bash
         run: |
