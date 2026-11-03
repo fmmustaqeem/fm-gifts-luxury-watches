@@ -15,8 +15,8 @@ function fm_gifts_luxury_setup() {
 }
 add_action( 'after_setup_theme', 'fm_gifts_luxury_setup' );
 function fm_gifts_luxury_assets() {
-    wp_enqueue_style( 'fm-gifts-luxury', get_stylesheet_uri(), array(), '1.0.0' );
-    wp_enqueue_script( 'fm-gifts-luxury', get_template_directory_uri() . '/assets/theme.js', array(), '1.0.0', true );
+    wp_enqueue_style( 'fm-gifts-luxury', get_stylesheet_uri(), array(), '1.0.1' );
+    wp_enqueue_script( 'fm-gifts-luxury', get_template_directory_uri() . '/assets/theme.js', array(), '1.0.1', true );
 }
 add_action( 'wp_enqueue_scripts', 'fm_gifts_luxury_assets' );
 function fm_gifts_luxury_body_class( $classes ) {
